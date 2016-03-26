@@ -1,0 +1,220 @@
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12 paginationDiv">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">系统管理</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">参数配置</a>
+##                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+            <!--search  area-->
+            <div class="searchArea">
+                <form action="$!{CONTEXT_PATH}/param/list" method="post" id="searchForm">
+                    <div class="form-group">
+                        <label>Key</label>
+                        <input type="text" class="form-control" name="pKey" />
+                    </div>
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input type="text" class="form-control" name="pDesc" />
+                    </div>
+                </form>
+                <button class="btn btn-primary search" onclick="qryData('searchForm')"><i class="iconfont icon-sousuo"></i>查询</button>
+                <button class="btn btn-success reset" onclick="resetForm('searchForm')"><i class="iconfont icon-shuaxin"></i>重置</button>
+            </div>
+            <!--card list-->
+            <div class="btn-list">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add"><i class="iconfont icon-jia"></i>新增</button>
+            </div>
+
+            <!--table area-->
+            <div class="table_area">
+                <input type="hidden" id="p_number" value="">
+
+                <div class="queryResultList" id="queryResultList">
+
+                </div>
+
+                #paginationDiv()
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加参数</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="addForm">
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">KEY<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="pKey" />
+                                </td>
+                                <td class="col-sm-2">名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="pDesc">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>值<span class="star">*</span></td>
+                                <td>
+                                    <input class="form-control" type="text" name="pValue">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-add"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改参数</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="modifyForm">
+                        <input type="hidden" name="id" >
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">KEY<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="pKey" />
+                                </td>
+                                <td class="col-sm-2">名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="pDesc">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>值<span class="star">*</span></td>
+                                <td>
+                                    <input class="form-control" type="text" name="pValue">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-modify"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        qryData('searchForm');
+
+        // 新增保存
+        $('.btn-add').click(function() {
+            showMask();
+
+            var url = base + '/param/add';
+            $.ajax({
+                url: url,
+                data: $('#addForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#addForm')[0].reset();
+                        $('#add').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改按钮加载数据
+        $('#modify').on('show.bs.modal', function (el) {
+            var invoker = $(el.relatedTarget);
+
+            var id = invoker.attr('id');
+
+            var url = base + '/param/modify?id=' + id;
+            $.ajax({
+                url: url,
+                type: 'get',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        data = data.data;
+
+                        $('#modifyForm').find('input[name="id"]').val(data.id);
+                        $('#modifyForm').find('input[name="pKey"]').val(data.pKey);
+                        $('#modifyForm').find('input[name="pDesc"]').val(data.pDesc);
+                        $('#modifyForm').find('input[name="pValue"]').val(data.pValue);
+
+                        hideMask();
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改保存
+        $('.btn-modify').click(function() {
+            showMask();
+
+            var url = base + '/param/modify';
+            $.ajax({
+                url: url,
+                data: $('#modifyForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#modify').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+    });
+</script>

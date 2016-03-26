@@ -1,0 +1,5 @@
+#set($CONTEXT_PATH = ${rc.contextPath})
+#set($JS_VERSION = "1.0.1")
+<script>
+	var base = '$!{CONTEXT_PATH}';
+</script>
