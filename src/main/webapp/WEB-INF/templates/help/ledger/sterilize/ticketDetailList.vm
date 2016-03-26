@@ -1,0 +1,30 @@
+#set($layout = "/sk/ledger/sterilize/layout.vm")
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>消毒内容</th>
+        <th>消毒数量</th>
+        <th>消毒方法</th>
+        <th>消毒时间</th>
+        <th>消毒人</th>
+        <th>监督人</th>
+    ##        <th>所属企业</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach($row in $pageInfo.list)
+        <tr>
+            <td>$!{row.itemName}</td>
+            <td>$!{row.quantity}</td>
+            <td>$!{row.method}</td>
+            <td>$!{row.doTime}</td>
+            <td>$!{row.operater}</td>
+            <td>$!{row.checker}</td>
+        ##                <td>$!{row.productNo}</td>
+        <tr>
+        #end
+    </tbody>
+</table>
+
+#pagination()

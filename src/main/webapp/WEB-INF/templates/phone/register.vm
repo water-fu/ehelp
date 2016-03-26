@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>登录</title>
+
+    #parse("sys_param.vm")
+    #parse("addon/app/css.vm")
+
+    <link href="$!{CONTEXT_PATH}/static/app/css/mobile.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <header>
+            <a href="login.html" class="fr">登录<i class="iconfont icon-shuangjiantou"></i></a>
+        </header>
+        <div class="banner">
+            <h3>欢迎注册E帮护</h3>
+        </div>
+        <div class="loginbox regis">
+            <form id="registerForm">
+                <input type="hidden" name="type" value="1">
+                <ul>
+                    <li>
+                        <label>手机号:</label>
+                        <input type="text" name="phoneNo" placeholder="请输入正确有效的手机号"/>
+                    </li>
+                    <li>
+                        <label class="pass">密&nbsp;&nbsp;&nbsp;码:</label>
+                        <input type="password" name="password" placeholder="6-20位字母、数字或符号"/>
+                        <i class="iconfont icon-eye look_pass"></i>
+                    </li>
+                    <li>
+                        <label class="pass">验证码:</label>
+                        <input type="text" name="code" placeholder="请输入验证码"/>
+                        <a href="javascript:sendCode()" class="vertify">获取验证码</a>
+                    </li>
+                </ul>
+            </form>
+            <button class="btn btn-login" onclick="register()">注册</button>
+            <p class="agreement">注册即表示您已同意<a href="#">用户服务协议</a></p>
+        </div>
+        <div class="service">
+            <img src="$!{CONTEXT_PATH}/static/app/image/serv.png" alt="客服" />
+            <div>
+                <p class="num">400-666-8888</p>
+                <p class="tl">服务时间: 9:00-20:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+<script type="text/javascript">
+    function sendCode() {
+        var phoneNo = $('#registerForm').find('input[name="phoneNo"]').val();
+        if(phoneNo == '') {
+            alert('请输入手机号码');
+            return;
+        }
+        if (!checkTel(phoneNo)) {
+            alert("请输入正确的手机号码");
+            return;
+        }
+
+        $.ajax({
+            url: base + '/p/identifyCode/sendCode',
+            data: {
+                'phoneNo': phoneNo,
+                'type' : 1 // 表示注册
+            },
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('send error');
+            },
+            success: function(data) {
+                if(data.flag) {
+                    alert('send success');
+                } else {
+                    alert(data.msg)
+                }
+            }
+        });
+    }
+
+    function checkTel(value){
+        var isMob= /^(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+
+        if(isMob.test(value)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    // 注册
+    function register() {
+        var phoneNo = $('#registerForm').find('input[name="phoneNo"]').val();
+        if(phoneNo == '') {
+            alert('请输入手机号码');
+            return;
+        }
+        if (!checkTel(phoneNo)) {
+            alert("请输入正确的手机号码");
+            return;
+        }
+
+        $.ajax({
+            url: base + '/p/register',
+            data: $('#registerForm').serialize(),
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('send error');
+            },
+            success: function(data) {
+                if(data.flag) {
+                    alert('send success');
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+</script>

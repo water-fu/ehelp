@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>患者认证</title>
+
+    #parse("sys_param.vm")
+    #parse("addon/css.vm")
+    #parse("addon/javascript.vm")
+    #parse("addon/jQueryValidationEngine.vm")
+</head>
+<body>
+    <form id="authenForm">
+        <input type="hidden" name="type" value="1">
+        <table>
+            <tr>
+                <td><input class="form-control validate[required" type="text" name="name" placeholder="姓名"
+                                       data-errormessage-value-missing="* ." data-errormessage="*"></td>
+            </tr>
+            <tr>
+                <td><input class="form-control validate[required]" type="text" name="idCodes" placeholder="身份证号"
+                                       data-errormessage-value-missing="* 请输入密码" data-errormessage="*"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="file" class="form-control validate[required]" id="idPath" accept="image/*"
+                           placeholder="手持身份证头部着" data-errormessage-value-missing="* 请上传手持身份证头部照" data-errormessage="*">
+                </td>
+            </tr>
+            <tr>
+                <td><input type="file" class="form-control validate[required]" id="bodyPath"
+                           placeholder="手持身份证头部着" data-errormessage-value-missing="* 请上传手持身份证头部照" data-errormessage="*"></td>
+            </tr>
+            <tr>
+                <td><input class="btn-success" type="submit" value="认证"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+<script type="text/javascript">
+
+    $(function(){
+
+    });
+</script>

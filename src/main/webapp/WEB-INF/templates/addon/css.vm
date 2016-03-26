@@ -1,0 +1,6 @@
+<!-- Bootstrap core CSS -->
+<link href="$!{CONTEXT_PATH}/static/js/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<!--link the font css-->
+<link rel="stylesheet" href="$!{CONTEXT_PATH}/static/fonts/iconfont.css" />
+<!--global css-->
+<link rel="stylesheet" href="$!{CONTEXT_PATH}/static/css/global.css" />

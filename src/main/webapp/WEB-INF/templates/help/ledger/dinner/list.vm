@@ -1,0 +1,61 @@
+#set($layout = "/sk/ledger/dinner/layout.vm")
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>餐饮企业名称</th>
+        <th>法人代表</th>
+        <th>所属管辖食药监局</th>
+        <th>集体聚餐台账日期</th>
+        <th>上传时间</th>
+        <th>上传人</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach($row in $pageInfo.list)
+        <tr>
+            <td>
+                $!{row.enterpriseId}
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+                $!{row.ledgerDate}
+            </td>
+            <td>
+                $!{row.createDate}
+            </td>
+            <td>
+                $!{row.createUserid}
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="btn_list" src="$!{CONTEXT_PATH}/ledgerDinner/detail?lid=$!{row.ledgerId}">明细</a>
+                <a href="javascript:void(0)" class="btn_list" src="$!{CONTEXT_PATH}/ledgerDinner/ticket?lid=$!{row.ledgerId}&from=l">票证</a>
+            </td>
+        </tr>
+        #end
+    </tbody>
+</table>
+#pagination()
+
+<script type="text/javascript">
+
+    $(function() {
+        $('.btn_list').click(function() {
+            var paginationDiv = $('#searchForm').parents('.paginationDiv');
+            var pageBar = paginationDiv.find('.pagerBar');
+            var oldCondition = convertToObject(pageBar.attr('oldCondition'));
+
+            sessionStorage.setItem('d_f_number', $(this).parents('#queryResultList').find('.p_number').val());
+            sessionStorage.setItem('d_f_startDate', oldCondition.startDate);
+            sessionStorage.setItem('d_f_endDate', oldCondition.endDate);
+
+            location.href = $(this).attr('src') + '#ledger-additif';
+        });
+    });
+</script>

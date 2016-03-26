@@ -1,0 +1,58 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12 paginationDiv">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">积分管理</a>
+##                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+            <!--search  area-->
+            <div class="searchArea">
+                <form action="$!{CONTEXT_PATH}/memberlevel/list" method="post" id="searchForm">
+                    <div class="form-group">
+                        <label>等级名称</label>
+                        <input type="text" class="form-control" name="name" />
+                    </div>
+                </form>
+                <button class="btn btn-primary search" onclick="qryData('searchForm')"><i class="iconfont icon-sousuo"></i>查询</button>
+                <button class="btn btn-success reset" onclick="resetForm('searchForm')"><i class="iconfont icon-shuaxin"></i>重置</button>
+            </div>
+            <!--card list-->
+            <div class="btn-list">
+                <button class="btn btn-success" onclick="add()"><i class="iconfont icon-jia"></i>新增等级</button>
+                <button class="btn btn-blue" onclick="del()"><i class="iconfont icon-shanchu"></i>删除</button>
+            </div>
+
+            <!--table area-->
+            <div class="table_area">
+                <input type="hidden" id="p_number" value="">
+
+                <div class="queryResultList" id="queryResultList">
+
+                </div>
+
+                #paginationDiv()
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        qryData('searchForm');
+    });
+
+    function add() {
+        load('$!{CONTEXT_PATH}/memberlevel/add');
+    }
+
+    function del() {
+
+    }
+</script>

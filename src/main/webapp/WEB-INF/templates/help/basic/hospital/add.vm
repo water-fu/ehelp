@@ -1,0 +1,126 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="$!{CONTEXT_PATH}/hospital#basic-hospital">医院信息</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">新增医院信息</a>
+                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+
+            <form id="editForm">
+                <!--info table-->
+                <table class="table table-bordered detailInfo">
+                    <tr class="caption">
+                        <th colspan="6">医院基本信息</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%;">医院名称<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <input class="form-control" type="text" name="name" />
+                        </td>
+                        <td style="width: 10%;">医院类型<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <select class="form-control" name="type">
+                                <option value="">请选择</option>
+                                <option value="1">综合性医院</option>
+                                <option value="2">专科医院</option>
+                            </select>
+                        </td>
+                        <td style="width: 10%;">医院等级<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <select class="form-control" name="level">
+                                <option value="">请选择</option>
+                                <option value="1">三甲医院</option>
+                                <option value="2">三乙医院</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>省<span class="star">*</span></td>
+                        <td>
+                            <select class="form-control" name="areaIds">
+                                <option value="">请选择</option>
+                                <option value="57">浙江省</option>
+                            </select>
+                        </td>
+                        <td>市<span class="star">*</span></td>
+                        <td>
+                            <select class="form-control" name="areaIds">
+                                <option value="">请选择</option>
+                                <option value="571">杭州市</option>
+                            </select>
+                        </td>
+                        <td>县区<span class="star">*</span></td>
+                        <td>
+                            <select class="form-control" name="areaIds">
+                                <option value="">请选择</option>
+                                <option value="57101">西湖区</option>
+                                <option value="57102">滨江区</option>
+                                <option value="57103">萧山区</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>乡镇/街道<span class="star">*</span></td>
+                        <td>
+                            <select class="form-control" name="areaIds">
+                                <option value="">请选择</option>
+                                <option value="5710101">留下街道</option>
+                                <option value="5710102">古荡街道</option>
+                            </select>
+                        </td>
+                        <td>具体地址<span class="star">*</span></td>
+                        <td colspan="3">
+                            <input class="form-control" type="text" name="address">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div class="btn-bottom">
+                <button class="btn btn-success btn-baocun"><i class="iconfont icon-baocun"></i>保存</button>
+                <button class="btn btn-default btn-quxiao"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 保存
+        $('.btn-baocun').click(function() {
+            showMask();
+
+            var url = base + '/hospital/add';
+            var data = $('#editForm').serialize();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+
+                        history.go(-1);
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        $('.btn-quxiao').click(function() {
+            history.back(-1);
+        })
+    });
+</script>
