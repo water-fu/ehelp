@@ -1,8 +1,8 @@
 package com.wisdom.web.controller.phone.user;
 
 import com.wisdom.common.cache.SessionCache;
-import com.wisdom.common.constants.CommonConstant;
-import com.wisdom.common.constants.SysParamDetailConstant;
+import com.wisdom.web.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.entity.SessionDetail;
 import com.wisdom.common.exception.ApplicationException;
@@ -10,8 +10,6 @@ import com.wisdom.common.util.CookieUtil;
 import com.wisdom.dao.entity.Account;
 import com.wisdom.service.service.sys.IIdentifyCodeService;
 import com.wisdom.service.service.user.IAccountService;
-import com.wisdom.weChat.config.WeChatSetting;
-import com.wisdom.weChat.service.IJsapiTicketService;
 import com.wisdom.web.common.BaseController;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -80,8 +78,9 @@ public class PUserController extends BaseController {
                 SessionDetail sessionDetail = new SessionDetail();
                 sessionDetail.setAccountId(account.getId());
                 sessionDetail.setPhoneNo(account.getPhoneNo());
+                sessionDetail.setType(account.getType());
 
-                // 把redis的key存入cookie，有效期30分钟
+                // 把redis的key存入cookie，有效期1天
                 String value = UUID.randomUUID().toString();
                 CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
 
@@ -135,5 +134,88 @@ public class PUserController extends BaseController {
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login() {
         return String.format(PHONE_VM_ROOT, "login");
+    }
+
+    /**
+     * 登陆
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean login(Account account, HttpServletResponse response) {
+        try {
+
+            account = accountService.login(account);
+
+            // session缓存失败，不影响用户注册
+            try {
+                // session到redis的对象
+                SessionDetail sessionDetail = new SessionDetail();
+                sessionDetail.setAccountId(account.getId());
+                sessionDetail.setPhoneNo(account.getPhoneNo());
+                sessionDetail.setType(account.getType());
+
+                // 把redis的key存入cookie，有效期1天
+                String value = UUID.randomUUID().toString();
+                CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
+
+                // 把用户登陆信息存入redis
+                sessionCache.put(value, sessionDetail, CommonConstant.SESSION_TIME_OUT_DAY);
+
+            } catch (Exception ex) {
+                logger.error("缓存redis异常:" + ex.getMessage(), ex);
+            }
+
+            ResultBean resultBean = new ResultBean(true);
+
+            return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
+    }
+
+    /**
+     * 注册完成选择页面
+     * @return
+     */
+    @RequestMapping(value = "choose", method = RequestMethod.GET)
+    public String choose() {
+        return String.format(PHONE_VM_ROOT, "choose");
+    }
+
+    /**
+     * 忘记密码页面
+     * @return
+     */
+    @RequestMapping(value = "forget", method = RequestMethod.GET)
+    public String forget() {
+        return String.format(PHONE_VM_ROOT, "forget");
+    }
+
+    /**
+     * 忘记密码
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "forget", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean forget(Account account, String code) {
+        try {
+            // 校验验证码是否正确
+            Boolean flag = identifyCodeService.validIdentifyCode(account.getPhoneNo(), code, SysParamDetailConstant.IDENTIFY_TYPE_FOTGET);
+            if(!flag) {
+                throw new ApplicationException("验证码错误");
+            }
+
+            // 修改account表
+            account = accountService.forget(account);
+
+            ResultBean resultBean = new ResultBean(true);
+
+            return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
     }
 }

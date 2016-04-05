@@ -1,7 +1,7 @@
 package com.wisdom.weChat.config;
 
 import com.wisdom.common.cache.SessionCache;
-import com.wisdom.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.weChat.entity.JsapiTicket;
 import com.wisdom.weChat.service.IJsapiTicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +54,6 @@ public class JsapiTicketSetting {
         sessionCache.put(CommonConstant.JSAPI_TICKET_VALUE, jsapiTicket, jsapiTicket.getExpiresIn());
 
         // 加载时间
-        this.loadTime = System.currentTimeMillis();
+        this.setLoadTime(System.currentTimeMillis());
     }
 }

@@ -1,7 +1,10 @@
 package com.wisdom.service.service.sys.impl;
 
-import com.wisdom.common.constants.CommonConstant;
-import com.wisdom.common.constants.SysParamDetailConstant;
+import com.wisdom.dao.entity.Account;
+import com.wisdom.dao.entity.AccountExample;
+import com.wisdom.dao.mapper.AccountMapper;
+import com.wisdom.web.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.DateUtil;
 import com.wisdom.common.util.StringUtil;
@@ -27,6 +30,9 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
     @Autowired
     private IdentifyCodeMapper identifyCodeMapper;
 
+    @Autowired
+    private AccountMapper accountMapper;
+
     /**
      * 发送验证码
      * @param phoneNo
@@ -34,6 +40,28 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
      */
     @Override
     public String sendIdentifyCode(String phoneNo, String type, String ip) {
+
+        // 是注册的话，发送验证码先验证该手机号是否已经注册
+        if(SysParamDetailConstant.IDENTIFY_TYPE_REGISTER.equals(type)) {
+            AccountExample accountExample = new AccountExample();
+            accountExample.createCriteria().andPhoneNoEqualTo(phoneNo);
+
+            List<Account> accountList = accountMapper.selectByExample(accountExample);
+            if(CollectionUtils.isNotEmpty(accountList)) {
+                throw new ApplicationException("手机号码已经注册");
+            }
+        }
+        // 忘记密码,校验手机号码是否存在
+        else if(SysParamDetailConstant.IDENTIFY_TYPE_FOTGET.equals(type)) {
+            AccountExample accountExample = new AccountExample();
+            accountExample.createCriteria().andPhoneNoEqualTo(phoneNo);
+
+            List<Account> accountList = accountMapper.selectByExample(accountExample);
+            if(CollectionUtils.isEmpty(accountList)) {
+                throw new ApplicationException("手机号码不存在");
+            }
+        }
+
         String code;
 
         IdentifyCodeExample example = new IdentifyCodeExample();

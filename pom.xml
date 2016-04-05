@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.wisdom</groupId>
-  <artifactId>ehelp</artifactId>
+  <artifactId>icare</artifactId>
   <packaging>war</packaging>
-  <version>0.01-SNAPSHOT</version>
-  <name>elink</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>icare</name>
   <url>http://localhost:8080/</url>
 
 
@@ -290,6 +290,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <version>0.1.52</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk16</artifactId>
       <version>1.45</version>
@@ -312,7 +318,7 @@
 
 
   <build>
-    <finalName>ehelp</finalName>
+    <finalName>icare</finalName>
 
     <plugins>
       <plugin>

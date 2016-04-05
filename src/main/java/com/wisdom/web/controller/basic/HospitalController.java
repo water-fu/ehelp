@@ -1,14 +1,12 @@
 package com.wisdom.web.controller.basic;
 
-import com.wisdom.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.util.StringUtil;
 import com.wisdom.dao.entity.Hospital;
-import com.wisdom.dao.mapper.HospitalMapper;
 import com.wisdom.service.service.basic.IHospitalService;
 import com.wisdom.common.entity.PageInfo;
 import com.wisdom.web.common.BaseController;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

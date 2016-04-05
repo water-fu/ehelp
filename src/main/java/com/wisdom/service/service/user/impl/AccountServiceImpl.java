@@ -1,7 +1,7 @@
 package com.wisdom.service.service.user.impl;
 
-import com.wisdom.common.constants.CommonConstant;
-import com.wisdom.common.constants.SysParamDetailConstant;
+import com.wisdom.web.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.encrypt.EncryptFactory;
 import com.wisdom.common.entity.PageInfo;
 import com.wisdom.common.exception.ApplicationException;
@@ -146,7 +146,11 @@ public class AccountServiceImpl implements IAccountService {
         }
 
         // MD5加密默认密码
-        account.setPassword(EncryptFactory.getInstance(SysParamDetailConstant.MD5).encodePassword(CommonConstant.DEFAULT_PWD, CommonConstant.SALT));
+        if(StringUtil.isNotEmptyObject(account.getPassword())) {
+            account.setPassword(EncryptFactory.getInstance(SysParamDetailConstant.MD5).encodePassword(account.getPassword(), CommonConstant.SALT));
+        } else {
+            account.setPassword(EncryptFactory.getInstance(SysParamDetailConstant.MD5).encodePassword(CommonConstant.DEFAULT_PWD, CommonConstant.SALT));
+        }
 
         // 状态为新增
         account.setStatus(SysParamDetailConstant.ACCOUNT_STATUS_NEW);
@@ -160,6 +164,61 @@ public class AccountServiceImpl implements IAccountService {
         accountMapper.insertSelective(account);
 
         return account;
+    }
+
+    /**
+     * 系统登陆
+     * @param account
+     */
+    @Override
+    public Account login(Account account) {
+        AccountExample example = new AccountExample();
+        example.createCriteria().andPhoneNoEqualTo(account.getPhoneNo())
+                .andIsDelEqualTo(SysParamDetailConstant.IS_DEL_FALSE);
+
+        List<Account> list = accountMapper.selectByExample(example);
+
+        if(CollectionUtils.isEmpty(list)) {
+            throw new ApplicationException("账号不存在");
+        }
+
+        Account accountData = list.get(0);
+
+        boolean flag = EncryptFactory.getInstance(SysParamDetailConstant.MD5).isPasswordValid(accountData.getPassword(), account.getPassword(), CommonConstant.SALT);
+        if(!flag) {
+            throw new ApplicationException("密码不正确");
+        }
+
+        if(accountData.getStatus().equals(SysParamDetailConstant.ACCOUNT_STATUS_INVALID)) {
+            throw new ApplicationException("账号已失效");
+        }
+
+        return accountData;
+    }
+
+    /**
+     * 忘记密码
+     * @param account
+     * @return
+     */
+    @Override
+    public Account forget(Account account) {
+        // 校验手机号码是否存在
+        AccountExample accountExample = new AccountExample();
+        accountExample.createCriteria().andPhoneNoEqualTo(account.getPhoneNo());
+
+        List<Account> accountList = accountMapper.selectByExample(accountExample);
+        if(CollectionUtils.isEmpty(accountList)) {
+            throw new ApplicationException("手机号码不存在");
+        }
+
+        // 重新设置密码
+        Account accountData = accountList.get(0);
+        accountData.setPassword(EncryptFactory.getInstance(SysParamDetailConstant.MD5).encodePassword(account.getPassword(), CommonConstant.SALT));
+
+        accountMapper.updateByPrimaryKeySelective(accountData);
+
+        return accountData;
     }
 
     /**

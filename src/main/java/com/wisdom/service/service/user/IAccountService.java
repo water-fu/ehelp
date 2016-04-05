@@ -56,4 +56,17 @@ public interface IAccountService {
      * @return
      */
     Account register(Account account);
+
+    /**
+     * 系统登陆
+     * @param account
+     */
+    Account login(Account account);
+
+    /**
+     * 忘记密码
+     * @param account
+     * @return
+     */
+    Account forget(Account account);
 }

@@ -1,0 +1,14 @@
+#set($layout = "/sk/ledger/travel/layout.vm")
+
+<row>
+    <input type="hidden" id="in_ledgerId" value="$!{ledgerId}">
+    #foreach($map in $map.entrySet())
+        <div class="col-sm-4">
+##            <p class="pic_name">台账.jpg</p>
+            <img src="$!{map.value}" alt="票证" />
+            <a href="#pic" data-toggle="modal">点击查看大图</a>
+            <a href="#detail" data-toggle="modal" fid="$!{map.key}">旅游接待台账明细</a>
+        </div>
+    #end
+
+</row>

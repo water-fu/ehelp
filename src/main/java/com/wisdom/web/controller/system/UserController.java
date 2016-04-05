@@ -2,7 +2,12 @@ package com.wisdom.web.controller.system;
 
 import com.wisdom.common.cache.SessionCache;
 import com.wisdom.common.entity.ResultBean;
+import com.wisdom.common.entity.SessionDetail;
+import com.wisdom.common.util.CookieUtil;
+import com.wisdom.dao.entity.Account;
+import com.wisdom.service.service.user.IAccountService;
 import com.wisdom.web.common.BaseController;
+import com.wisdom.web.common.constants.CommonConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 /**
@@ -26,11 +33,14 @@ public class UserController extends BaseController {
     @Autowired
     private SessionCache sessionCache;
 
+    @Autowired
+    private IAccountService accountService;
+
     /**
      * 登陆页面
      * @return
      */
-    @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/", "login"}, method = RequestMethod.GET)
     public String index() {
         return String.format(MANAGER_VM_ROOT, "login");
     }
@@ -39,7 +49,7 @@ public class UserController extends BaseController {
      * 登陆页面
      * @return
      */
-    @RequestMapping(value = {"toLogin"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"toLogin"}, method = RequestMethod.GET)
     public String toLogin() {
         return String.format(MANAGER_VM_ROOT, "login");
     }
@@ -48,17 +58,39 @@ public class UserController extends BaseController {
      * 登陆
      * @param userName
      * @param password
-     * @param request
+     * @param response
      * @return
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean login(String userName, String password, HttpServletRequest request) {
+    public ResultBean login(String userName, String password, HttpServletResponse response) {
         try {
-            sessionCache.put(UUID.randomUUID().toString(), userName, 30 * 60);
+            Account account = new Account();
+            account.setPhoneNo(userName);
+            account.setPassword(password);
+
+            account = accountService.login(account);
+
+            // session缓存失败，不影响用户注册
+            try {
+                // session到redis的对象
+                SessionDetail sessionDetail = new SessionDetail();
+                sessionDetail.setAccountId(account.getId());
+                sessionDetail.setPhoneNo(account.getPhoneNo());
+                sessionDetail.setType(account.getType());
+
+                // 把redis的key存入cookie，有效期1天
+                String value = UUID.randomUUID().toString();
+                CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
+
+                // 把用户登陆信息存入redis
+                sessionCache.put(value, sessionDetail, CommonConstant.SESSION_TIME_OUT_DAY);
+
+            } catch (Exception ex) {
+                logger.error("缓存redis异常:" + ex.getMessage(), ex);
+            }
 
             ResultBean resultBean = new ResultBean(true);
-
 
             return resultBean;
         } catch (Exception ex) {
@@ -66,5 +98,30 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 退出
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultBean logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
 
+            Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+            if(null != cookie) {
+                String uid = cookie.getValue();
+                cookie.setMaxAge(0);
+
+                sessionCache.evict(uid);
+            }
+
+            ResultBean resultBean = new ResultBean(true);
+
+            return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
+    }
 }

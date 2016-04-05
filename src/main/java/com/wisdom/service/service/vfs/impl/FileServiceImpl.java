@@ -12,6 +12,7 @@ import com.wisdom.dao.mapper.vfs.FileUploadRecordMapper;
 import com.wisdom.service.service.vfs.IFileService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.vfs2.*;
+import org.apache.commons.vfs2.provider.UriParser;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -583,7 +584,7 @@ public class FileServiceImpl implements IFileService {
 			// DESEncrypt.decode(fileServerConfig.getPassword());
 
 			uri.append(protocol).append("://").append(user).append(":")
-					.append(passwd).append("@").append(ip).append(":")
+					.append(UriParser.encode(passwd)).append("@").append(ip).append(":")
 					.append(port).append(root).append("/").append(path)
 					.append("/").append(fileName);
 
@@ -592,7 +593,7 @@ public class FileServiceImpl implements IFileService {
 			uri.append(".").append(extName);
 		}
 
-		return uri.toString();
+		return UriParser.encode(uri.toString());
 //		return URLEncoder.encode(uri.toString(),"utf-8");
 	}
 

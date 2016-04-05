@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import sun.applet.Main;
 
 import java.io.IOException;
 
@@ -61,4 +62,41 @@ public class HttpClientUtil {
         jsonObject = JSONObject.fromObject(result);
         return jsonObject;
     }
+
+    /**
+     * 下载
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public static HttpResponse doDownStr(String url) throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+
+        HttpGet httpGet = new HttpGet(url);
+
+        HttpResponse httpResponse = httpclient.execute(httpGet);
+
+        return httpResponse;
+    }
+
+//    public static void main(String[] args) throws Exception {
+//        // 拼接请求地址
+//        String requestUrl = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
+//
+//        String accessToken = "KEl9nXW3cztflQkrbNXsYeG8BC2PthJqucCXFULds3tK-yRACnRiug20_utFdy1CUdpqY1VxDGRaxXwx8k9rKn75awqBBeNad1-3v-IAe82D-9XGDMizOEjUfhRsz3h5MZUeAGAWJE";
+//        String mediaId = "eo-KYJgrBUNymtpOXNEoNR280W_zUAc2Dw2t9-Y8EgTReleD3WvxR3xfHCIvo9jZ";
+//        requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("MEDIA_ID", mediaId);
+//
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//
+//        HttpGet httpGet = new HttpGet(requestUrl);
+//
+//
+//        HttpResponse httpResponse = httpclient.execute(httpGet);
+//
+//        byte[] result = EntityUtils.toByteArray(httpResponse.getEntity());
+//
+//        System.out.println(result);
+//        System.out.println(httpResponse);
+//    }
 }

@@ -14,6 +14,11 @@ public class SessionDetail implements Serializable {
     private Integer accountId;
 
     /**
+     * 用户类型
+     */
+    private String type;
+
+    /**
      * 手机号码
      */
     private String phoneNo;
@@ -29,6 +34,14 @@ public class SessionDetail implements Serializable {
 
     public void setAccountId(Integer accountId) {
         this.accountId = accountId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getPhoneNo() {

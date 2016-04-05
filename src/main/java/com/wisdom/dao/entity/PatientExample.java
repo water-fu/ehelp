@@ -1167,6 +1167,126 @@ public class PatientExample implements Serializable {
             addCriterion("CREATE_DATE not between", value1, value2, "createDate");
             return (Criteria) this;
         }
+
+        public Criteria andUpdateUserIsNull() {
+            addCriterion("UPDATE_USER is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserIsNotNull() {
+            addCriterion("UPDATE_USER is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserEqualTo(Integer value) {
+            addCriterion("UPDATE_USER =", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserNotEqualTo(Integer value) {
+            addCriterion("UPDATE_USER <>", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserGreaterThan(Integer value) {
+            addCriterion("UPDATE_USER >", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserGreaterThanOrEqualTo(Integer value) {
+            addCriterion("UPDATE_USER >=", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserLessThan(Integer value) {
+            addCriterion("UPDATE_USER <", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserLessThanOrEqualTo(Integer value) {
+            addCriterion("UPDATE_USER <=", value, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserIn(List<Integer> values) {
+            addCriterion("UPDATE_USER in", values, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserNotIn(List<Integer> values) {
+            addCriterion("UPDATE_USER not in", values, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserBetween(Integer value1, Integer value2) {
+            addCriterion("UPDATE_USER between", value1, value2, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateUserNotBetween(Integer value1, Integer value2) {
+            addCriterion("UPDATE_USER not between", value1, value2, "updateUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateIsNull() {
+            addCriterion("UPDATE_DATE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateIsNotNull() {
+            addCriterion("UPDATE_DATE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateEqualTo(Timestamp value) {
+            addCriterion("UPDATE_DATE =", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateNotEqualTo(Timestamp value) {
+            addCriterion("UPDATE_DATE <>", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateGreaterThan(Timestamp value) {
+            addCriterion("UPDATE_DATE >", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("UPDATE_DATE >=", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateLessThan(Timestamp value) {
+            addCriterion("UPDATE_DATE <", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateLessThanOrEqualTo(Timestamp value) {
+            addCriterion("UPDATE_DATE <=", value, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateIn(List<Timestamp> values) {
+            addCriterion("UPDATE_DATE in", values, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateNotIn(List<Timestamp> values) {
+            addCriterion("UPDATE_DATE not in", values, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("UPDATE_DATE between", value1, value2, "updateDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateDateNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("UPDATE_DATE not between", value1, value2, "updateDate");
+            return (Criteria) this;
+        }
     }
 
     /**

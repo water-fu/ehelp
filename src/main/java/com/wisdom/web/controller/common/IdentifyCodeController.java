@@ -1,6 +1,6 @@
 package com.wisdom.web.controller.common;
 
-import com.wisdom.common.constants.SysParamDetailConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.StringUtil;

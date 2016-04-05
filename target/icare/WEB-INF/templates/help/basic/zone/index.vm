@@ -1,0 +1,274 @@
+#parse("sys_param.vm")
+#parse("addon/treeview.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">行政区域</a>
+            ##                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-3" style="height: 500px;">
+                <div id="tree" style="height: 100%; overflow: auto;"></div>
+            </div>
+
+            <div class="col-sm-9 paginationDiv">
+
+                <!--search  area-->
+                <div class="searchArea">
+                    <form action="$!{CONTEXT_PATH}/zone/list" method="post" id="searchForm">
+                        <input type="hidden" id="nodeId">
+
+                        <input type="hidden" name="parentId">
+
+                        <div class="form-group">
+                            <label>区域名称</label>
+                            <input type="text" class="form-control" name="name" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label>区域简拼</label>
+                            <input type="text" class="form-control" name="simplePinyin" disabled />
+                        </div>
+                        <div class="form-group">
+                            <label>区域编码</label>
+                            <input type="text" class="form-control" name="code" disabled />
+                        </div>
+                    </form>
+                </div>
+                <!--card list-->
+                <div class="btn-list">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#add"><i class="iconfont icon-jia"></i>新增</button>
+                </div>
+
+                <!--table area-->
+                <div class="table_area">
+                    <input type="hidden" id="p_number" value="">
+
+                    <div class="queryResultList" id="queryResultList">
+
+                    </div>
+
+                    #paginationDiv()
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加行政区域</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="addForm">
+                        <input type="hidden" name="parentId">
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">区域名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="name" />
+                                </td>
+
+                                <td class="col-sm-2">区域编码<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="code" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-add"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改行政区域</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="modifyForm">
+                        <input type="hidden" name="id" >
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">区域名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="name" />
+                                </td>
+
+                                <td class="col-sm-2">区域编码<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="code" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-modify"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        initTreeData(0);
+
+        // 新增保存
+        $('.btn-add').click(function() {
+            showMask();
+
+            var url = base + '/zone/add';
+            $.ajax({
+                url: url,
+                data: $('#addForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#addForm')[0].reset();
+                        $('#add').modal('hide');
+
+                        //qryData('searchForm');
+                        initTreeData(parseInt($('#nodeId').val()));
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改按钮加载数据
+        $('#modify').on('show.bs.modal', function (el) {
+            var invoker = $(el.relatedTarget);
+
+            var id = invoker.attr('id');
+
+            var url = base + '/zone/get?id=' + id;
+            $.ajax({
+                url: url,
+                type: 'get',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        data = data.data;
+
+                        $('#modifyForm').find('input[name="id"]').val(data.id);
+
+                        $('#modifyForm').find('input[name="name"]').val(data.name);
+                        $('#modifyForm').find('input[name="code"]').val(data.code);
+
+                        hideMask();
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改保存
+        $('.btn-modify').click(function() {
+            showMask();
+
+            var url = base + '/zone/modify';
+            $.ajax({
+                url: url,
+                data: $('#modifyForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#modify').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+    });
+
+    function initTreeData(nodeId) {
+        showMask();
+
+        $('#tree').empty();
+        $.ajax({
+            url: base + '/zone/initData',
+            type: 'get',
+            error : function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('系统错误');
+                hideMask();
+            },
+            success : function (data, textStatus) {
+                if(data.flag) {
+                    $('#tree').treeview({
+                        data: data.data,
+                        levels: 2,
+                        onNodeSelected: function(event, data) {
+                            nodeSelect(data);
+                        }
+                    });
+                    $('#tree').treeview('revealNode', [ nodeId, { silent: true } ]);
+
+                    $('#tree').treeview('selectNode', [nodeId, {silent: true }]);
+
+                    nodeSelect($('#tree').treeview('getNode', nodeId));
+                } else {
+                    hideMask();
+                    alert(data.msg);
+                }
+            }
+        });
+    }
+
+    function nodeSelect(node) {
+        $('#searchForm').find('input[name="name"]').val(node.text);
+        $('#searchForm').find('input[name="code"]').val(node.code);
+        $('#searchForm').find('input[name="simplePinyin"]').val(node.simplePinyin);
+
+        $('#searchForm').find('input[name="parentId"]').val(node.id);
+        $('#addForm').find('input[name="parentId"]').val(node.id);
+
+        $('#searchForm').find('#nodeId').val(node.nodeId);
+        qryData('searchForm');
+    }
+</script>

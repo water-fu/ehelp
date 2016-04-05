@@ -1,6 +1,6 @@
 package com.wisdom.web.controller.basic;
 
-import com.wisdom.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.common.entity.PageInfo;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.dao.entity.Device;

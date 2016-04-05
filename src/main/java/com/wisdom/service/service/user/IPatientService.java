@@ -13,4 +13,12 @@ public interface IPatientService {
      * @return
      */
     Patient getAuditByAccountId(Patient patient);
+
+    /**
+     * 患者认证
+     * @param patient
+     * @param headImg
+     * @param bodyImg
+     */
+    void identification(Patient patient, byte[] headImg, byte[] bodyImg, String sessionId);
 }

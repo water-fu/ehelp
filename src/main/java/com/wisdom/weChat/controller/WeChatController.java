@@ -85,6 +85,8 @@ public class WeChatController extends BaseController {
             jsApiList.add("onMenuShareTimeline");
             jsApiList.add("hideOptionMenu");
             jsApiList.add("showMenuItems");
+            jsApiList.add("chooseImage");
+            jsApiList.add("uploadImage");
 
             map.put("jsApiList", jsApiList);
 

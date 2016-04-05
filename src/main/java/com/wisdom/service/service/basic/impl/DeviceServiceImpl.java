@@ -1,7 +1,7 @@
 package com.wisdom.service.service.basic.impl;
 
-import com.wisdom.common.constants.CommonConstant;
-import com.wisdom.common.constants.SysParamDetailConstant;
+import com.wisdom.web.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.PageInfo;
 import com.wisdom.common.util.DateUtil;
 import com.wisdom.common.util.Pinyin4jUtil;

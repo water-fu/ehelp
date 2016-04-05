@@ -56,14 +56,22 @@ public class TokenAspect {
         if(null != token && token.tokenCheck()) {
             // 刷新access_token是同步的
             synchronized (synchronize) {
-                long currentTime = new Date().getTime();
+                long currentTime = System.currentTimeMillis();
                 long loadTime = accessTokenSetting.getLoadTime();
 
-                // 过期前半小时加载
+                // 过期前15分钟加载
                 if((currentTime - loadTime) / 1000 > accessTokenSetting.getExpiresIn() - 15 * 60) {
-                    logger.info("Reload TokenAccess");
-                    accessTokenSetting.initAccessToken();
+                    accessTokenSetting.setIsLoading(true);
+                    accessTokenSetting.setLoadTime(System.currentTimeMillis());
                 }
+            }
+
+            // 正在加载中才去加载
+            if(accessTokenSetting.isLoading()) {
+                accessTokenSetting.setIsLoading(false);
+
+                logger.info("Reload TokenAccess");
+                accessTokenSetting.initAccessToken();
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.wisdom.weChat.service.impl;
 
 import com.wisdom.common.cache.SessionCache;
-import com.wisdom.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.weChat.annotation.Token;
 import com.wisdom.weChat.constant.UrlConstant;
 import com.wisdom.weChat.entity.AccessToken;

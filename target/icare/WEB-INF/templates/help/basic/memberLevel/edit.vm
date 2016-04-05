@@ -1,0 +1,83 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="$!{CONTEXT_PATH}/memberlevel#basic-memberlevel">等级信息</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">修改等级信息</a>
+                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+
+            <form id="editForm">
+                <input type="hidden" name="id" value="$!{memberlevel.id}">
+
+                <!--info table-->
+                <table class="table table-bordered detailInfo">
+                    <tr class="caption">
+                        <th colspan="6">等级基本信息</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%;">等级名称<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <input class="form-control" type="text" name="name" value="$!{memberlevel.name}" />
+                        </td>
+                        <td style="width: 10%;">积分门槛<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                        	<input class="form-control" type="text" name="point" value="$!{memberlevel.point}" />
+                        </td>
+                    </tr>
+                    <tr>
+                    	 <td style="width: 10%;">特权描述<span class="star">*</span></td>
+                        <td style="width: 20%;" colspan="3">
+                            <input class="form-control" type="text" name="descrption" value="$!{memberlevel.descrption}" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div class="btn-bottom">
+                <button class="btn btn-success btn-baocun"><i class="iconfont icon-baocun"></i>保存</button>
+                <button class="btn btn-default btn-quxiao"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 保存
+        $('.btn-baocun').click(function() {
+            showMask();
+
+            var url = base + '/memberlevel/edit';
+            var data = $('#editForm').serialize();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+
+                        load('${CONTEXT_PATH}/memberlevel');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        $('.btn-quxiao').click(function() {
+            load('${CONTEXT_PATH}/memberlevel');
+        })
+    });
+</script>

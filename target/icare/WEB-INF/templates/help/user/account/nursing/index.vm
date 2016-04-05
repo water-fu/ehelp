@@ -1,0 +1,377 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12 paginationDiv">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">用户管理</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">护士管理</a>
+##                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+            <!--search  area-->
+            <div class="searchArea">
+                <form action="$!{CONTEXT_PATH}/nursing/list" method="post" id="searchForm">
+                    <div class="form-group">
+                        <label>手机号码</label>
+                        <input type="text" class="form-control" name="phoneNo" />
+                    </div>
+                    <div class="form-group">
+                        <label>用户状态</label>
+                        <select name="status" class="form-control">
+                            <option value="">全部</option>
+                            #foreach($param in $!{cache.getListByKey("ACCOUNT_STATUS")})
+                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                            #end
+                        </select>
+                    </div>
+                </form>
+                <button class="btn btn-primary search" onclick="qryData('searchForm')"><i class="iconfont icon-sousuo"></i>查询</button>
+                <button class="btn btn-success reset" onclick="resetForm('searchForm')"><i class="iconfont icon-shuaxin"></i>重置</button>
+            </div>
+            <!--card list-->
+            <div class="btn-list">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add"><i class="iconfont icon-jia"></i>新增</button>
+            </div>
+
+            <!--table area-->
+            <div class="table_area">
+                <input type="hidden" id="p_number" value="">
+
+                <div class="queryResultList" id="queryResultList">
+
+                </div>
+
+                #paginationDiv()
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加护士信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="addForm">
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">手机号码<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="phoneNo" />
+                                </td>
+                                <td class="col-sm-2">昵称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">是否分红<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <select name="isReward" class="form-control">
+                                        #foreach($param in $!{cache.getListByKey("IS_REWARD")})
+                                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                        #end
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-add"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改护士信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="modifyForm">
+                        <input type="hidden" name="id" >
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">手机号码<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="phoneNo" />
+                                </td>
+                                <td class="col-sm-2">昵称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">是否分红<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <select name="isReward" class="form-control">
+                                        #foreach($param in $!{cache.getListByKey("IS_REWARD")})
+                                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                        #end
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-modify"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">护士详细信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="detailForm">
+                        <input type="hidden" name="id" >
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">姓名<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="name" />
+                                </td>
+                                <td class="col-sm-2">性别<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <select name="sex" class="form-control">
+                                        #foreach($param in $!{cache.getListByKey("SEX")})
+                                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                        #end
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">年龄<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="age" />
+                                </td>
+                                <td class="col-sm-2">身份证号码<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="idCode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">工作年限<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="workYears" />
+                                </td>
+                                <td class="col-sm-2">工作单位<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="workHospital" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">工作科室<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control" type="text" name="workDepartment" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">擅长范围<span class="star">*</span></td>
+                                <td class="col-sm-10" colspan="3">
+                                    <input class="form-control" type="text" name="goodRange" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">服务范围<span class="star">*</span></td>
+                                <td class="col-sm-10" colspan="3">
+                                    <input class="form-control" type="text" name="serviceRange" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">身份证照片<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <img src="#" alt="">
+                                </td>
+                                <td class="col-sm-2">从业资格证<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <img src="#" alt="">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-audit"><i class="iconfont icon-baocun"></i>审核通过</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        qryData('searchForm');
+
+        // 新增保存
+        $('.btn-add').click(function() {
+            showMask();
+
+            var url = base + '/nursing/add';
+            $.ajax({
+                url: url,
+                data: $('#addForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#addForm')[0].reset();
+                        $('#add').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改按钮加载数据
+        $('#modify').on('show.bs.modal', function (el) {
+            var invoker = $(el.relatedTarget);
+
+            var id = invoker.attr('id');
+
+            var url = base + '/account/get?id=' + id;
+            $.ajax({
+                url: url,
+                type: 'get',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        data = data.data;
+
+                        $('#modifyForm').find('input[name="id"]').val(data.id);
+
+                        $('#modifyForm').find('input[name="phoneNo"]').val(data.phoneNo);
+                        $('#modifyForm').find('input[name="name"]').val(data.name);
+
+                        $('#modifyForm').find('select[name="isReward"]').find('option[value=' + data.isReward + ']').attr('checked', 'checked');
+
+                        hideMask();
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改保存
+        $('.btn-modify').click(function() {
+            showMask();
+
+            var url = base + '/nursing/modify';
+            $.ajax({
+                url: url,
+                data: $('#modifyForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#modify').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 护士信息按钮加载数据
+        $('#detail').on('show.bs.modal', function (el) {
+
+            $('#detailForm').find('input').attr('disabled', 'disabled');
+            $('#detailForm').find('.star').html('');
+            $('#detailForm').find('img').css({'width': '150px', 'height': '80px'});
+
+            var invoker = $(el.relatedTarget);
+
+            var id = invoker.attr('id');
+            var status = invoker.attr('status');
+
+            if(status == 3) {
+                $('.btn-audit').hide();
+            }
+
+            var url = base + '/nurse/getByAccountId?accountId=' + id;
+            $.ajax({
+                url: url,
+                type: 'get',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        data = data.data;
+
+                        if(data.id) {
+
+                            $('#detailForm').find('input[name="id"]').val(data.id);
+                            $('#detailForm').find('input[name="name"]').val(data.name);
+                            $('#detailForm').find('select[name="sex"]').find('option[value=' + data.sex + ']').attr('selected', 'selected');
+                            $('#detailForm').find('input[name="age"]').val(data.age);
+                            $('#detailForm').find('input[name="idCode"]').val(data.idCode);
+                            $('#detailForm').find('input[name="workYears"]').val(data.workYears);
+                            $('#detailForm').find('input[name="workHospital"]').val(data.workHospital);
+                            $('#detailForm').find('input[name="workDepartment"]').val(data.workDepartment);
+                            $('#detailForm').find('input[name="goodRange"]').val(data.goodRange);
+                            $('#detailForm').find('input[name="serviceRange"]').val(data.serviceRange);
+                        } else {
+//                            $('#detailForm').find('input').removeAttr('disabled');
+//                            $('#detailForm').find('.star').html('*');
+                        }
+
+                        hideMask();
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+    });
+</script>

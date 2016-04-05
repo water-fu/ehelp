@@ -1,6 +1,6 @@
 package com.wisdom.service.service.sys.impl;
 
-import com.wisdom.common.constants.CacheNameConstant;
+import com.wisdom.web.common.constants.CacheNameConstant;
 import com.wisdom.common.entity.PageInfo;
 import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.StringUtil;

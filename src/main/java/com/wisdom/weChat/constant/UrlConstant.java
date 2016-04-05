@@ -40,4 +40,9 @@ public class UrlConstant {
      * 获取二维码
      */
     public static final String QUERY_QR_CODE = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
+
+    /**
+     * 服务器资源下载
+     */
+    public static final String MEDIA_DOWN_LOAD = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
 }

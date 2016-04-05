@@ -1,7 +1,7 @@
 package com.wisdom.weChat.config;
 
 import com.wisdom.common.cache.SessionCache;
-import com.wisdom.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.weChat.entity.AccessToken;
 import com.wisdom.weChat.service.IAccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,11 @@ public class AccessTokenSetting {
      */
     private int expiresIn;
 
+    /**
+     * 是否正在加载
+     */
+    private boolean isLoading;
+
     public Long getLoadTime() {
         return loadTime;
     }
@@ -52,12 +57,22 @@ public class AccessTokenSetting {
         this.expiresIn = expiresIn;
     }
 
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setIsLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+    }
+
     /**
      * 项目启动初始化access_token
      * @throws Exception
      */
     @PostConstruct
     public void initAccessToken() throws Exception {
+        this.setLoadTime(System.currentTimeMillis());
+
         AccessToken accessToken = accessTokenService.getAccessToken();
         this.setExpiresIn(accessToken.getExpiresIn());
 
@@ -66,8 +81,5 @@ public class AccessTokenSetting {
 
         // 初始化jsapi_ticket
         jsapiTicketSetting.initJsapiTicket();
-
-        // 加载时间
-        this.loadTime = new Date().getTime();
     }
 }
