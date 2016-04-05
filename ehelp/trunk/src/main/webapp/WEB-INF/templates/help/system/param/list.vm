@@ -1,0 +1,41 @@
+#parse("sys_param.vm")
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>KEY</th>
+        <th>名称</th>
+        <th>值</th>
+        <th style="width: 10%;;">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach($row in $pageInfo.list)
+        <tr>
+            <td>
+                $!{row.pKey}
+            </td>
+            <td>
+                $!{row.pDesc}
+            </td>
+            <td>
+                $!{row.pValue}
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="btn_oper" src="$!{CONTEXT_PATH}/param/detail?id=$!{row.id}">配置</a>
+                <a href="#modify" data-toggle="modal" id="$!{row.id}">修改</a>
+            </td>
+        </tr>
+        #end
+    </tbody>
+</table>
+#pagination()
+
+<script type="text/javascript">
+
+    $(function() {
+        $('.btn_oper').click(function() {
+            location.href = $(this).attr('src') + '#system-param';
+        });
+    });
+</script>

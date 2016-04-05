@@ -1,0 +1,30 @@
+#set($layout = "/sk/ledger/purchase/layout.vm")
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>产品名称</th>
+        <th>数量</th>
+        <th>规格(公斤/袋/瓶)</th>
+        <th>保质期(天)</th>
+        <th>供货商</th>
+        <th>生产厂家</th>
+        <th>生产批号</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach($row in $pageInfo.list)
+        <tr>
+            <td>$!{row.productName}</td>
+            <td>$!{row.quantity}</td>
+            <td>$!{row.standard}</td>
+            <td>$!{row.validity}</td>
+            <td>$!{row.provider}</td>
+            <td>$!{row.productor}</td>
+            <td>$!{row.productNo}</td>
+        <tr>
+        #end
+    </tbody>
+</table>
+
+#pagination()

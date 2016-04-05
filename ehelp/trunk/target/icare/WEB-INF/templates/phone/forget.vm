@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>忘记密码</title>
+
+    #parse("sys_param.vm")
+    #parse("addon/app/css.vm")
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <header>
+            <a href="$!{CONTEXT_PATH}/p/login" class="fl"><i class="iconfont icon-shuangjiantouzuo"></i>取消</a>
+        </header>
+        <div class="banner">
+            <h3>忘记密码</h3>
+        </div>
+        <div class="loginbox regis">
+            <form id="forgetForm">
+                <ul>
+                    <li>
+                        <label>手机号:</label>
+                        <input type="text" name="phoneNo" placeholder="请输入正确有效的手机号" />
+                    </li>
+                    <li>
+                        <label class="pass">验证码:</label>
+                        <input type="text" name="code" placeholder="请输入验证码"/>
+                        <a href="javascript:void(0)" class="vertify sendCode">获取验证码</a>
+                    </li>
+                    <li>
+                        <label class="pass">新密码:</label>
+                        <input type="password" name="password" id="password" placeholder="6-20位字母、数字或符号"/>
+                        <i class="iconfont icon-eye look_pass passShow" state="1"></i>
+                    </li>
+                </ul>
+            </form>
+            <button class="btn btn-login submit">完成</button>
+##            <p class="agreement">注册即表示您已同意<a href="#">用户服务协议</a></p>
+        </div>
+        <div class="service">
+            <img src="$!{CONTEXT_PATH}/static/app/image/serv.png" alt="客服" />
+            <div>
+                <p class="num">400-666-8888</p>
+                <p class="tl">服务时间: 9:00-20:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+<script type="text/javascript">
+    $(function() {
+        // 是否现实密码
+        $('.passShow').click(function() {
+            if($(this).attr('state') == '1') {
+                $('#password').hideShowPassword(true);
+                $(this).attr('state', '0');
+            } else if($(this).attr('state') == '0') {
+                $('#password').hideShowPassword(false);
+                $(this).attr('state', '1');
+            }
+        });
+
+        // 绑定
+        $('#submit').bind('click', submit);
+        $('.sendCode').bind('click', sendCode);
+    });
+
+    var timeOut = 60;
+    function sendCode() {
+        var phoneNo = $('#forgetForm').find('input[name="phoneNo"]').val();
+        if(phoneNo == '') {
+            alert('请输入手机号码');;
+            return;
+        }
+        if (!checkTel(phoneNo)) {
+            alert("请输入正确的手机号码");
+            return;
+        }
+
+        $('.sendCode').unbind('click');
+
+        $.ajax({
+            url: base + '/identifyCode/sendCode',
+            data: {
+                'phoneNo': phoneNo,
+                'type' : 2 // 表示忘记密码
+            },
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('网络异常，请稍后再试');
+
+                $('.sendCode').bind('click', sendCode);
+                $('.sendCode').html('获取验证码');
+            },
+            success: function(data) {
+                if(data.flag) {
+                    $('.sendCode').html('正在发送密码');
+
+                    setTime();
+
+                } else {
+                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+
+                    $('.sendCode').bind('click', sendCode);
+                    $('.sendCode').html('获取验证码');
+                }
+            }
+        });
+    }
+
+    // 设置60秒超时
+    function setTime() {
+        if(timeOut == 1) {
+            $('.sendCode').html('获取验证码');
+            timeOut = 60;
+            $('.sendCode').bind('click', sendCode);
+        } else {
+            timeOut--;
+            $('.sendCode').html(timeOut + '秒后重新获取');
+
+            setTimeout(function() {
+                setTime();
+            }, 1000);
+        }
+    }
+
+    function checkTel(value){
+        var isMob= /^(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+
+        if(isMob.test(value)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    // 注册
+    function submit() {
+        var phoneNo = $('#forgetForm').find('input[name="phoneNo"]').val();
+        if(phoneNo == '') {
+            alert('请输入手机号码');
+            return;
+        }
+
+        if (!checkTel(phoneNo)) {
+            alert("请输入正确的手机号码");
+            return;
+        }
+
+        var pwd = $('#forgetForm').find('input[name="password"]').val();
+        if(pwd == '') {
+            alert('请输入密码');
+            return;
+        }
+
+        $('#submit').addClass('btn-gray');
+        $('#submit').unbind('click');
+
+        $.ajax({
+            url: base + '/p/forget',
+            data: $('#forgetForm').serialize(),
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('网络异常，请稍后再试');
+
+                $('#submit').removeClass('btn-gray');
+                $('#submit').bind('click', submit);
+            },
+            success: function(data) {
+                if(data.flag) {
+                    location.href = '$!{CONTEXT_PATH}/p/login';
+                } else {
+                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                    $('#submit').removeClass('btn-gray');
+                    $('#submit').bind('click', submit);
+                }
+            }
+        });
+    }
+</script>

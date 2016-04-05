@@ -1,0 +1,277 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12 paginationDiv">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">医疗器械管理</a>
+##                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+            <!--search  area-->
+            <div class="searchArea">
+                <form action="$!{CONTEXT_PATH}/device/list" method="post" id="searchForm">
+                    <div class="form-group">
+                        <label>器械名称</label>
+                        <input type="text" class="form-control" name="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>名称简拼</label>
+                        <input type="text" class="form-control" name="simplePinyin" />
+                    </div>
+                </form>
+                <button class="btn btn-primary search" onclick="qryData('searchForm')"><i class="iconfont icon-sousuo"></i>查询</button>
+                <button class="btn btn-success reset" onclick="resetForm('searchForm')"><i class="iconfont icon-shuaxin"></i>重置</button>
+            </div>
+            <!--card list-->
+            <div class="btn-list">
+                <button class="btn btn-success" data-toggle="modal" data-target="#add"><i class="iconfont icon-jia"></i>新增</button>
+            </div>
+
+            <!--table area-->
+            <div class="table_area">
+                <input type="hidden" id="p_number" value="">
+
+                <div class="queryResultList" id="queryResultList">
+
+                </div>
+
+                #paginationDiv()
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加医疗器械</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="addForm">
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">器械名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,maxSize[32]]" type="text" name="name" />
+                                </td>
+
+                                <td class="col-sm-2">器械分类<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <select name="type" class="form-control validate[required]">
+                                        <option value="">请选择</option>
+                                        #foreach($param in $!{cache.getListByKey("DEVICE_TYPE")})
+                                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                        #end
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">数量<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,custom[number],min[0],maxSize[16]]" type="text" name="number" />
+                                </td>
+
+                                <td class="col-sm-2">单价<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,custom[number],min[0],maxSize[16]]" type="text" name="price" placeholder="元" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">用途<span class="star">*</span></td>
+                                <td colspan="3" class="col-sm-10">
+                                    <input class="form-control validate[required,maxSize[64]]" type="text" name="purpose" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-add"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">修改医疗器械</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal_wrap">
+                    <form id="modifyForm">
+                        <input type="hidden" name="id" >
+                        <!--info table-->
+                        <table class="table table-bordered detailInfo">
+                            <tr>
+                                <td class="col-sm-2">器械名称<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,maxSize[32]]" type="text" name="name" />
+                                </td>
+
+                                <td class="col-sm-2">器械分类<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <select name="type" class="form-control validate[required]">
+                                        <option value="">请选择</option>
+                                        #foreach($param in $!{cache.getListByKey("DEVICE_TYPE")})
+                                            <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                        #end
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">数量<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,custom[number],min[0],maxSize[16]]" type="text" name="number" />
+                                </td>
+
+                                <td class="col-sm-2">单价<span class="star">*</span></td>
+                                <td class="col-sm-4">
+                                    <input class="form-control validate[required,custom[number],min[0],maxSize[16]]" type="text" name="price" placeholder="元" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-sm-2">用途<span class="star">*</span></td>
+                                <td colspan="3" class="col-sm-10">
+                                    <input class="form-control validate[required,maxSize[64]]" type="text" name="purpose" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border">
+                <button type="button" class="btn btn-success btn-baocun btn-modify"><i class="iconfont icon-baocun"></i>保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        qryData('searchForm');
+
+        // 新增显示
+        $('#add').on('show.bs.modal', function (el) {
+            $('#addForm').validationEngine('hideAll');
+            $('#addForm')[0].reset();
+        });
+
+        // 新增保存
+        $('.btn-add').click(function() {
+
+            var flag = $('#addForm').validationEngine('validate');
+            if(!flag)
+                return;
+
+            showMask();
+
+            var url = base + '/device/add';
+            $.ajax({
+                url: url,
+                data: $('#addForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#addForm')[0].reset();
+                        $('#add').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改按钮加载数据
+        $('#modify').on('show.bs.modal', function (el) {
+
+            $('#modifyForm').validationEngine('hideAll');
+
+            var invoker = $(el.relatedTarget);
+
+            var id = invoker.attr('id');
+
+            var url = base + '/device/get?id=' + id;
+            $.ajax({
+                url: url,
+                type: 'get',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        data = data.data;
+
+                        $('#modifyForm').find('input[name="id"]').val(data.id);
+
+                        $('#modifyForm').find('input[name="name"]').val(data.name);
+                        $('#modifyForm').find('select[name="type"]').find('option[value=' + data.type + ']').attr('selected', 'selected');
+
+                        $('#modifyForm').find('input[name="number"]').val(data.number);
+                        $('#modifyForm').find('input[name="price"]').val(data.price);
+                        $('#modifyForm').find('input[name="purpose"]').val(data.purpose);
+
+                        hideMask();
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        // 修改保存
+        $('.btn-modify').click(function() {
+            var flag = $('#modifyForm').validationEngine('validate');
+            if(!flag)
+                return;
+
+            showMask();
+
+            var url = base + '/device/modify';
+            $.ajax({
+                url: url,
+                data: $('#modifyForm').serialize(),
+                type: 'post',
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('系统错误');
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+                        $('#modify').modal('hide');
+
+                        qryData('searchForm');
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+    });
+</script>

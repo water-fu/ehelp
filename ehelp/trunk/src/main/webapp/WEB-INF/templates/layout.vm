@@ -1,0 +1,19 @@
+<script src="$!{CONTEXT_PATH}/static/js/baidu/uaredirect.js?v=$JS_VERSION" type="text/javascript"></script>
+<script type="text/javascript">
+    var isWeChat = false;
+    is_weChat();
+
+    // 判断是否微信浏览器
+    function is_weChat(){
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i) == "micromessenger") {
+            isWeChat = true;
+        }
+    }
+
+    // 跳转到手机访问地址
+    function to_phone(url) {
+        uaredirect(url);
+    }
+</script>
+$screen_content

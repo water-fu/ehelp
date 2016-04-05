@@ -1,0 +1,526 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,legend,button
+form,fieldset,input,textarea,p,blockquote,th,td {   
+　　padding: 0;   
+　　margin: 0;   
+}
+/* 酌情修改 */
+body {
+    background:#fff;color:#333;font-size:12px;font-family:"microsoft yahei","simsun","Arial Narrow";
+}
+
+/* 短引用的内容可取值：''或"" */
+q:before,q:after {content:'';}
+
+/* 缩写，图片等无边框 */
+fieldset,img,abbr,acronym {border: 0 none;}
+abbr,acronym {font-variant: normal;}
+legend {color:#000;}
+
+/* 清除特殊标记的字体和字号 */
+address,caption,cite,code,dfn,em,strong,th,var {   
+　　font-weight: normal;   
+　　font-style: normal;   
+}
+
+/* 上下标 */
+sup {vertical-align: text-top;}
+sub {vertical-align: text-bottom;}
+
+/* 设置表格的边框被合并为一个单一的边框, 指定分隔边框模型中单元格边界之间的距离为0*/
+table {   
+　　border-collapse: collapse;   
+　　border-spacing: 0;   
+}   
+
+/* 表格标题及内容居左显示 */
+caption,th {text-align: left;}
+input,img,select {vertical-align:middle;}
+
+/* 清除列表样式 */
+ol,ul {list-style: none;margin-left:-40px;}  
+
+/* 输入控件字体 */
+input,button,textarea,select,optgroup,option {
+    font-family:inherit;
+    font-size:inherit;
+    font-style:inherit;
+    font-weight:inherit;
+}
+
+/* 标题元素样式清除 */ 
+h1,h2,h3,h4,h5,h6 {   
+　　font-weight: normal;   
+　　font-size: 100%;   
+}   
+
+/* 链接样式，颜色可酌情修改 */
+del,ins,a {text-decoration:none;}
+a:hover,a:active,a:focus {color:#0066cb; text-decoration:none;} 
+
+/* 鼠标样式 */
+input[type="submit"] {cursor: pointer;}
+button {cursor: pointer;}
+input::-moz-focus-inner { border: 0; padding: 0;}
+
+.clear {clear:both;}
+/*self css*/
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.tr{
+	text-align: right;
+}
+.tc{
+	text-align: center;
+}
+.tl{
+	text-align: left;
+}
+.m-xs {
+	margin:5px;
+}
+.m-sm {
+	margin:10px;
+}
+.m {
+	margin:15px;
+}
+.m-md {
+	margin:20px;
+}
+.m-lg {
+	margin:30px;
+}
+.m-n {
+	margin:0 !important;
+}
+.m-l-none {
+	margin-left:0;
+}
+.m-l-xs {
+	margin-left:5px;
+}
+.m-l-sm {
+	margin-left:10px;
+}
+.m-l {
+	margin-left:15px;
+}
+.m-l-md {
+	margin-left:20px;
+}
+.m-l-lg {
+	margin-left:30px;
+}
+.m-l-xl {
+	margin-left:40px;
+}
+.m-l-n-xxs {
+	margin-left:-1px;
+}
+.m-l-n-xs {
+	margin-left:-5px;
+}
+.m-l-n-sm {
+	margin-left:-10px;
+}
+.m-l-n {
+	margin-left:-15px;
+}
+.m-l-n-md {
+	margin-left:-20px;
+}
+.m-l-n-lg {
+	margin-left:-30px;
+}
+.m-l-n-xl {
+	margin-left:-40px;
+}
+.m-t-none {
+	margin-top:0;
+}
+.m-t-xxs {
+	margin-top:1px;
+}
+.m-t-xs {
+	margin-top:5px;
+}
+.m-t-sm {
+	margin-top:10px;
+}
+.m-t {
+	margin-top:15px;
+}
+.m-t-md {
+	margin-top:20px;
+}
+.m-t-lg {
+	margin-top:30px;
+}
+.m-t-xl {
+	margin-top:40px;
+}
+.m-t-n-xxs {
+	margin-top:-1px;
+}
+.m-t-n-xs {
+	margin-top:-5px;
+}
+.m-t-n-sm {
+	margin-top:-10px;
+}
+.m-t-n {
+	margin-top:-15px;
+}
+.m-t-n-md {
+	margin-top:-20px;
+}
+.m-t-n-lg {
+	margin-top:-30px;
+}
+.m-t-n-xl {
+	margin-top:-40px;
+}
+.m-r-none {
+	margin-right:0;
+}
+.m-r-xs {
+	margin-right:5px;
+}
+.m-r-sm {
+	margin-right:10px;
+}
+.m-r {
+	margin-right:15px;
+}
+.m-r-md {
+	margin-right:20px;
+}
+.m-r-lg {
+	margin-right:30px;
+}
+.m-r-xl {
+	margin-right:40px;
+}
+.m-r-n-xxs {
+	margin-right:-1px;
+}
+.m-r-n-xs {
+	margin-right:-5px;
+}
+.m-r-n-sm {
+	margin-right:-10px;
+}
+.m-r-n {
+	margin-right:-15px;
+}
+.m-r-n-md {
+	margin-right:-20px;
+}
+.m-r-n-lg {
+	margin-right:-30px;
+}
+.m-r-n-xl {
+	margin-right:-40px;
+}
+.m-b-none {
+	margin-bottom:0;
+}
+.m-b-xs {
+	margin-bottom:5px;
+}
+.m-b-sm {
+	margin-bottom:10px;
+}
+.m-b {
+	margin-bottom:15px;
+}
+.m-b-md {
+	margin-bottom:20px;
+}
+.m-b-lg {
+	margin-bottom:30px;
+}
+.m-b-xl {
+	margin-bottom:40px;
+}
+.m-b-n-xxs {
+	margin-bottom:-1px;
+}
+.m-b-n-xs {
+	margin-bottom:-5px;
+}
+.m-b-n-sm {
+	margin-bottom:-10px;
+}
+.m-b-n {
+	margin-bottom:-15px;
+}
+.m-b-n-md {
+	margin-bottom:-20px;
+}
+.m-b-n-lg {
+	margin-bottom:-30px;
+}
+.m-b-n-xl {
+	margin-bottom:-40px;
+}
+/*some css for mobile edit by linsywu*/
+body{
+	background: #fff url(../image/m_bg.png) no-repeat;
+}
+header{
+	width: 100%;
+	height: 50px;
+	line-height:50px;
+	font-size: 1.3em;
+	padding: 0px 10px;
+}
+header>a{
+	color: #444444;
+}
+header>a>i{
+	color:#B7B7B7;
+}
+div.banner{
+	text-align: center;
+	width: 100%;
+	padding:10px;
+}
+div.banner>img{
+	width:25%;
+	max-width: 120px;
+}
+.loginbox{
+	padding:1.5em;
+	text-align: center;
+}
+.loginbox li{
+	padding: 10px 0px;
+	text-align: center;
+	font-size: 1.4em;
+	border-bottom: 1px solid #dfdfdf;
+	letter-spacing: 2px;
+	position: relative;
+	color: #585858;
+}
+.loginbox li>label{
+	font-weight: normal;
+	margin-bottom: 0px;
+	vertical-align: middle;
+}
+.loginbox li>input{
+	border: none;
+	height: 34px;
+	width: 70%;
+	background-color: rgba(255,255,255,0);
+	outline: none;
+	vertical-align: middle;
+	font-size: 0.8em;
+    padding-top: 5px;
+}
+.loginbox li>i.look_pass{
+	position: absolute;
+    top: 13px;
+    right: -5px;
+    font-size: 1.3em;
+    color: #949494;
+    cursor: pointer;
+}
+.loginbox .btn-login{
+	width: 90%;
+    height: 35px;
+    border-radius: 100px;
+    background-color: #77cc00;
+    border: none;
+    color: #fff;
+    font-size: 1.4em;
+    letter-spacing: 5px;
+    margin-top: 1em;
+    outline: none;
+}
+.loginbox .forget{
+	display: block;
+	font-size: 1.2em;
+	margin-top: 1em;
+	color: #333;
+}
+.link{
+	text-align: center;
+	position: relative;
+	border-top: 1px dashed #ddd;
+	margin-top: 10%;
+}
+.link>p{
+	color: #999;
+    position: absolute;
+    top: -10px;
+    left: 34%;
+    padding: 0 10px;
+    background-color: rgba(237, 247, 255, 0.42);
+}
+.link .list>a{
+	margin-top: 20px;
+	display: inline-block;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+.link .list>a>i{
+	font-size: 3.5em;
+}
+.link .list>a.weixin>i{
+	color: #1abf85;
+}
+.link .list>a.weibo>i{
+	color: #e74957;
+}
+.link .list>a.qq>i{
+	color: #2eb3eb;
+}
+/*regis.html*/
+.vertify{
+	position: absolute;
+    color: #77cc00;
+    border: 1px solid #77cc00;
+    display: inline-block;
+    width: 34%;
+    right: 0px;
+    top: 7px;
+    border-radius: 100px;
+    height: 35px;
+    line-height: 34px;
+    font-size: 0.8em;
+}
+a.vertify:hover, a.vertify:active, a.vertify:focus{
+	color:#77cc00;
+}
+.loginbox .agreement{
+	padding: 1em 0;
+}
+.loginbox .agreement>a{
+	color:#77cc00 ;
+}
+.service{
+	text-align: center;
+	border-top: 1px solid #ddd;
+	padding: 15px 0px;
+}
+.service img{
+	width: 17%;
+}
+.service>div{
+	display: inline-block;
+	margin-left: 15px;
+	font-size: 1.3em;
+	vertical-align: -webkit-baseline-middle;
+}
+.service>div>p.num{
+	font-size: 1.5em;
+	color: #000;
+	margin-bottom: 0px;
+}
+.regis{
+	padding: 8% 3%;
+}
+/*注册完成页面css*/
+.over>.row>img{
+	width: 100%;
+}
+.over .list{
+	position: relative;
+	width: 100%;
+	display: inline-block;
+	padding: 10px;
+	border-bottom: 1px solid #e6e6e6;
+}
+.over .list>span{
+	display: inline-block;
+	width: 45px;
+	height: 45px;
+	background: url(../image/over_ico.png) no-repeat;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+}
+.over .list:nth-child(3)>span{
+	background-position-y: -104px;
+}
+.over .list>ul{
+	display: inline-block;
+	vertical-align: bottom;
+	margin-left:-30px;
+	color: #A9A9A9;
+}
+.over .list>ul>li.title{
+	font-size:1.3em;
+	color: #000;
+}
+.over .list>i{
+	position: absolute;
+	right: 10px;
+	top:25px;
+	color: #a9a9a9;
+}
+.over .btnbox{
+	padding-top: 30px;
+	text-align: center;
+	color: #A9A9A9;
+}
+.over .btnbox>.btn-groom{
+	width: 85%;
+	min-width: 150px;
+	border-radius: 100px;
+	background-color: #ff8000;
+	font-size: 1.4em;
+	color: #fff;
+}
+.iden li{
+	text-align: left;
+}
+.iden .up_pic{
+	border-bottom: none;
+}
+.iden .up_pic>a{
+	position: relative;
+	display: inline-block;
+    width: 48%;
+    height: 170px;
+    text-align: center;
+    border: 5px solid #CCEAFB;
+    vertical-align: top;
+    padding-top: 15px;
+}
+.iden .up_pic>a>p{
+	width: 100%;
+	margin: 0px;
+	font-size: .7em;
+	position: absolute;
+	bottom: 0px;
+	text-align: center;
+	background-color: #CCEAFB;
+	color: #777;
+	padding: 10px;
+}
+.iden .up_pic>a>i{
+	font-size: 3em;
+	color: #9edafd;
+}
+.page_title{
+	text-align: center;
+}
+.page_title>span{
+	font-size: 1.3em;
+	margin-left: -50px;
+}
+.page_title>a{
+	font-size: .9em;
+}
+.page_title>a>i{
+	color: #7C0;
+    font-size: 1.5em;
+    vertical-align: middle;
+    margin: 0px;
+}
+    

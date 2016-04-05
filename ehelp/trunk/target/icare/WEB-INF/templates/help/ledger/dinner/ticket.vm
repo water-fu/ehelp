@@ -1,0 +1,100 @@
+#set($layout = "layout.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-nav">
+                <a href="$!{CONTEXT_PATH}/ledgerDinner/list#ledger-additif">集体聚餐台账</a>
+                &gt;
+                <a href="$!{CONTEXT_PATH}/ledgerDinner/detail#ledger-additif">集体聚餐台账明细</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">票证</a>
+                <button class="reback" onclick="goBack('$!{request.getParameter('from')}')"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+
+            <div class="gallery clearfix ticketList">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog paginationDiv">
+
+        <form id="searchForm" action="$!{CONTEXT_PATH}/ledgerDinner/ticketDetailList" method="post">
+            <input type="hidden" name="ledgerId" value="">
+            <input type="hidden" name="fileId" value="">
+        </form>
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">
+                    集体聚餐台账明细
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="table_area table-responsive cell ">
+                    <div class="queryResultList" id="queryResultList">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    #paginationDiv()
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+<!--相册功能-->
+<div class="modal fade pic" id="pic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <img src="" alt="票证图片" />
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    function goBack(from) {
+        // 列表页
+        if(from == 'l') {
+            sessionStorage.setItem('d_f_from', 'b');
+        }
+        // 明细页
+        else if (from == 'd') {
+            sessionStorage.setItem('d_s_from', 'b');
+        }
+
+        history.back(-1);
+    }
+
+    $(function() {
+        // 查询票证列表
+        var path = '$!{CONTEXT_PATH}/ledgerDinner/ticketList?dinnerId=$!{request.getParameter("pid")}&ledgerId=$!{request.getParameter("lid")}';
+        $('.ticketList').load(path);
+
+        // 点击查看大图时，设置图片链接
+        $('#pic').on('show.bs.modal', function (e) {
+            var invoker = $(e.relatedTarget);
+
+            var src = invoker.parent().find('img').attr('src');
+            $(this).find('img').attr('src', src);
+        });
+
+        $('#detail').on('show.bs.modal', function (e) {
+            var invoker = $(e.relatedTarget);
+
+            var fid = invoker.attr('fid');
+            var lid = $('#in_ledgerId').val();
+
+            $('#searchForm').find('input[name="ledgerId"]').val(lid);
+            $('#searchForm').find('input[name="fileId"]').val(fid);
+
+            qryData('searchForm');
+        });
+    });
+</script>

@@ -1,0 +1,55 @@
+<link href="$!{CONTEXT_PATH}/static/addon/jQueryValidationEngine/css/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
+<script src="$!{CONTEXT_PATH}/static/addon/jQueryValidationEngine/javascript/jquery.validationEngine-zh_CN.js" type="text/javascript"></script>
+<script src="$!{CONTEXT_PATH}/static/addon/jQueryValidationEngine/javascript/jquery.validationEngine.js" type="text/javascript"></script>
+<style type="text/css">
+    /*验证样式*/
+    .formError .formErrorContent {
+        width: 100%;
+        background: #A59090;
+        position:relative;
+        color: #fff;
+        width:auto;
+        white-space:nowrap;
+        font-size: 11px;
+        line-height:17px;
+        border: 1px solid #fff;
+        box-shadow: 0 0 6px #fff;
+        -moz-box-shadow: 0 0 6px #fff;
+        -webkit-box-shadow: 0 0 6px #fff;
+        padding: 3px 10px 4px 10px;
+        border-radius: 6px;
+        -moz-border-radius: 6px;
+        -webkit-border-radius: 6px;
+    }
+    .formError .formErrorArrow div {
+        border-left: 2px solid #A59090;
+        border-right: 2px solid #A59090;
+        box-shadow: 0 2px 3px #444;
+        -moz-box-shadow: 0 2px 3px #444;
+        -webkit-box-shadow: 0 2px 3px #444;
+        font-size: 0px; height: 1px;
+        background: #A59090;
+        margin: 0 auto;
+        line-height: 0;
+        font-size: 0;
+        display: block;
+    }
+
+    .formError .formErrorArrow .line1,
+    .formError .formErrorArrow .line2,
+    .formError .formErrorArrow .line3 {
+        background-color: #A59090;
+    }
+
+    .formError .formErrorArrow .line3 {
+        border-right-color: #A59090;
+        border-bottom-color: #A59090;
+        border-left-color: #A59090;
+    }
+</style>
+<script type="text/javascript">
+    $.validationEngineLanguage.allRules.telPhone = {
+        'regex': /^(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/,
+        'alertText': ''
+    };
+</script>

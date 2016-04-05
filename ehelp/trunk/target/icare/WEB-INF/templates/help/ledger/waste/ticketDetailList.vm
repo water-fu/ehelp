@@ -1,0 +1,25 @@
+#set($layout = "/sk/ledger/waste/layout.vm")
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>泔水数量(公斤)</th>
+        <th>回收用途</th>
+        <th>回收人</th>
+        <th>监督人</th>
+    ##        <th>回收时间</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach($row in $pageInfo.list)
+        <tr>
+            <td>$!{row.quantity}</td>
+            <td>$!{row.purpose}</td>
+            <td>$!{row.operater}</td>
+            <td>$!{row.checker}</td>
+        <tr>
+        #end
+    </tbody>
+</table>
+
+#pagination()

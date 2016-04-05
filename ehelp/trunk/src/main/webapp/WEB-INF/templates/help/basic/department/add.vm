@@ -1,0 +1,79 @@
+#set($layout = "layout.vm")
+#parse("sys_param.vm")
+
+<div class="container content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="page-nav">
+                <a href="javascript:void(0);" class="last">基础数据</a>
+                &gt;
+                <a href="$!{CONTEXT_PATH}/hospital#basic-hospital">科室信息</a>
+                &gt;
+                <a href="javascript:void(0)" class="last">新增科室信息</a>
+                <button class="reback" onclick="history.go(-1)"><i class="iconfont icon-left"></i>返回</button>
+            </div>
+
+            <form id="editForm">
+                <!--info table-->
+                <table class="table table-bordered detailInfo">
+                    <tr class="caption">
+                        <th colspan="6">科室基本信息</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%;">科室名称<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <input class="form-control" type="text" name="name" />
+                        </td>
+                        <td style="width: 10%;">科室类型<span class="star">*</span></td>
+                        <td style="width: 20%;">
+                            <select class="form-control" name="type">
+                                <option value="">请选择</option>
+                                <option value="1">科室类型1</option>
+                                <option value="2">科室类型2</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div class="btn-bottom">
+                <button class="btn btn-success btn-baocun"><i class="iconfont icon-baocun"></i>保存</button>
+                <button class="btn btn-default btn-quxiao"><i class="iconfont icon-cuowu"></i>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 保存
+        $('.btn-baocun').click(function() {
+            showMask();
+
+            var url = base + '/department/add';
+            var data = $('#editForm').serialize();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                error : function (XMLHttpRequest, textStatus, errorThrown) {
+                    hideMask();
+                },
+                success : function (data, textStatus) {
+                    if(data.flag) {
+                        hideMask();
+
+                        history.go(-1);
+                    } else {
+                        hideMask();
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        $('.btn-quxiao').click(function() {
+            history.back(-1);
+        })
+    });
+</script>

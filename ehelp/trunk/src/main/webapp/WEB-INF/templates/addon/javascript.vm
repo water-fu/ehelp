@@ -1,0 +1,9 @@
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="$!{CONTEXT_PATH}/static/js/jquery/1.11.0/jquery.min.js?v=$JS_VERSION"></script>
+<script src="$!{CONTEXT_PATH}/static/js/bootstrap/3.3.5/js/bootstrap.min.js?v=$JS_VERSION"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="$!{CONTEXT_PATH}/static/js/ie10-viewport-bug-workaround.js?v=$JS_VERSION"></script>
+<script src="$!{CONTEXT_PATH}/static/js/templates/common/self.js?v=$JS_VERSION"></script>
+<script src="$!{CONTEXT_PATH}/static/js/tools/pagination_m.js?v=$JS_VERSION"></script>
+<script src="$!{CONTEXT_PATH}/static/js/tools/sys.js?v=$JS_VERSION"></script>
+<script src="$!{CONTEXT_PATH}/static/js/tools/jquery.pager.js?v=$JS_VERSION"></script>

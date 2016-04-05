@@ -1,0 +1,120 @@
+html,body,.container,.row,.login{
+	height: 100%;
+	background:#00a9f1 url(../img/kit_login.png) no-repeat;
+	background-size: 100% 100%;
+}
+.login{
+	width: 80%;
+	margin: 0px auto;
+	min-width: 1024px;
+}
+.login .head{
+	height: 110px;
+	color: #fff;
+	font-size: 2.5em;
+	padding-top: 45px;
+}
+.login .head span{
+	vertical-align: -webkit-baseline-middle;
+}
+.login .login_wrap{
+	padding-top: 60px;
+}
+.login .left{
+	height: 500px;
+	width: 70%;
+	/*background: url(../img/kit_poster.png) no-repeat;*/
+	background-size: 100% 100%;
+	float: left;
+}
+.login .right{
+	width: 30%;
+	padding: 25px 30px;
+	float: left;
+}
+.login .right .loginbox{
+	width: 290px;
+	height: 345px;
+	background-color: #fff;
+	text-align: center;
+	padding:20px 30px;
+}
+.login .right .loginbox  input{
+	background: #fff url(../img/input_bg.png) no-repeat;
+	border:1px solid #ddd;
+	width: 100%;
+	height: 34px;
+	margin-bottom:20px;
+	text-indent: 2em;
+}
+.login .right .loginbox  input.username{
+	background-position:3px 5px;
+}
+.login .right .loginbox  input.password{
+	background-position:3px -53px;
+}
+.login .right .loginbox p.wel{
+	font-size: 1.5em;
+	color:#00a9f1;
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+.login .right .loginbox p a:first-child{
+	float: left;
+}
+.login .right .loginbox p a:last-child{
+	float: right;
+	color: #080808;
+}
+.login .right .loginbox .btn-login{
+	width: 100%;
+	height: 30px;
+	background-color: #00a9f1;
+	color: #fff;
+	margin-top: 35px;
+	letter-spacing: 10px;
+}
+.fr{
+	float: right;
+}
+/*底部版权信息*/
+.login_foot{
+	text-align: center;
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+	line-height: 20px;
+	background-color: rgba(0,0,0,0.3);
+}
+.login_foot ul{
+	display: inline-block;
+	margin-bottom: 0px;
+}
+.login_foot ul>li{
+	float: left;
+	margin: 5px 15px 0px 15px;
+}
+.login_foot ul>li>a{
+	color: #fff;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

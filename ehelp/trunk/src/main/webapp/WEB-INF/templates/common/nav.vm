@@ -1,0 +1,96 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand sys_name" href="#"><img src="$!{CONTEXT_PATH}/static/img/kitchen_logo.png" alt="logo" /></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><img src="$!{CONTEXT_PATH}/static/img/user.png" alt="..." class="img-circle"/></li>
+                <li><a href="javascript:void(0);">萧十一郎，欢迎您！</a></li>
+                <li><a href="javascript:void(0);" onclick="logout()"><i class="iconfont icon-tuichu"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-12 main_nav">
+        <ul class="nav nav-pills">
+            <li class="system" data-target="#system"><a href="javascript:void(0)"><i class="iconfont icon-weizhi"></i>系统管理</a></li>
+            <li class="basic" data-target="#basic"><a href="javascript:void(0)"><i class="iconfont icon-jichutaizhangguanli"></i>基础数据</a></li>
+            <li class="account" data-target="#account"><a href="javascript:void(0)"><i class="iconfont icon-idcard"></i>用户管理</a></li>
+        </ul>
+
+        <div class="sec_nav" id="system">
+            <ul>
+                <li><a href="javascript:void(0);" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/param#system-param">参数配置</a></li>
+            </ul>
+        </div>
+        <div class="sec_nav" id="basic">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/hospital">医院信息</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/department">科室信息</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/device">医疗器械</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/zone">行政区域</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/nursingType">护理类型管理</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/memberlevel">会员等级管理</a></li>
+            </ul>
+        </div>
+        <div class="sec_nav" id="account">
+            <ul>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/accountPatient">患者管理</a></li>
+                <li><a href="javascript:void(0)" onclick="menu_load(this)" src="$!{CONTEXT_PATH}/nursing">护士管理</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    $(function() {
+//        $('.main_nav').find('li').css({'cursor': 'point'});
+    });
+
+    function menu_load(el) {
+        $('.main_nav').find('.active').removeClass('active');
+
+        var _this = $(el);
+        // 当前点击选中状态
+        _this.parent().addClass('active');
+
+        // 上次菜单选中
+        var id = _this.parents('div.sec_nav').attr('id');
+        $('.nav').find('li.' + id).addClass('active');
+
+        $('.body').load(_this.attr('src'));
+    }
+
+    function load(url) {
+        $('.body').load(url);
+    }
+
+    function logout() {
+        var flag = confirm('确认要退出吗?');
+
+        if(!flag) {
+            return;
+        }
+
+        $.ajax({
+            url: '${CONTEXT_PATH}/logout',
+            type: 'get',
+            success: function(data) {
+                if(data.flag) {
+                    location.href = '$!{CONTEXT_PATH}/login';
+                } else {
+                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/login');
+                }
+            },
+            error: function(data) {
+                alert('系统异常');
+            }
+        })
+    }
+</script>
