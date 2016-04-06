@@ -79,4 +79,15 @@ public class SysParamDetailConstant {
      * 患者状态
      */
     public static final String PATIENT_STATUS_ADD = "1"; // 新增
+
+    /**
+     * 登陆类型
+     */
+    public static final String LOGIN_FROM_SYSTEM = "1"; // 系统登陆
+
+    public static final String LOGIN_FROM_WECHAT = "2"; // 微信登陆
+
+    public static final String LOGIN_FROM_WEIBO = "3"; // 微博登陆
+
+    public static final String LOGIN_FROM_QQ = "4"; // QQ登陆
 }

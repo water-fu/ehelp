@@ -8,6 +8,7 @@ import com.wisdom.dao.entity.Account;
 import com.wisdom.service.service.user.IAccountService;
 import com.wisdom.web.common.BaseController;
 import com.wisdom.web.common.constants.CommonConstant;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,8 @@ public class UserController extends BaseController {
                 sessionDetail.setAccountId(account.getId());
                 sessionDetail.setPhoneNo(account.getPhoneNo());
                 sessionDetail.setType(account.getType());
+                sessionDetail.setStatus(account.getStatus());
+                sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
                 String value = UUID.randomUUID().toString();

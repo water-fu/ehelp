@@ -111,6 +111,18 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     /**
+     * 根据主键获取
+     * @param id
+     * @return
+     */
+    @Override
+    public Account get(Integer id) {
+        Account account = accountMapper.selectByPrimaryKey(id);
+
+        return account;
+    }
+
+    /**
      * 保存修改
      * @param account
      */

@@ -40,10 +40,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         notNeedValid.add("/identifyCode/validPhoneNo");
         notNeedValid.add("/identifyCode/sendCode");
 
-        notNeedValid.add("/p/patient/success");
+//        notNeedValid.add("/p/patient/success");
 
         // 微信的接口
         notNeedValid.add("/weChat");
+        notNeedValid.add("/weChatLogin");
 
         String url = request.getRequestURI();
 
