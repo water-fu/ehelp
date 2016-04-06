@@ -79,6 +79,8 @@ public class PUserController extends BaseController {
                 sessionDetail.setAccountId(account.getId());
                 sessionDetail.setPhoneNo(account.getPhoneNo());
                 sessionDetail.setType(account.getType());
+                sessionDetail.setStatus(account.getStatus());
+                sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
                 String value = UUID.randomUUID().toString();
@@ -155,6 +157,8 @@ public class PUserController extends BaseController {
                 sessionDetail.setAccountId(account.getId());
                 sessionDetail.setPhoneNo(account.getPhoneNo());
                 sessionDetail.setType(account.getType());
+                sessionDetail.setStatus(account.getStatus());
+                sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
                 String value = UUID.randomUUID().toString();

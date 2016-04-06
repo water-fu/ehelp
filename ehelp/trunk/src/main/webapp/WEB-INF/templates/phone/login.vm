@@ -37,7 +37,7 @@
         <div class="link">
             <p>第三方账户登录</p>
             <div class="list">
-                <a href="#" class="weixin"><i class="iconfont icon-weixin"></i></a>
+                <a href="$!{CONTEXT_PATH}/weChatLogin/login" class="weixin"><i class="iconfont icon-weixin"></i></a>
                 <a href="#" class="weibo"><i class="iconfont icon-weibo"></i></a>
                 <a href="#" class="qq"><i class="iconfont icon-qq"></i></a>
             </div>

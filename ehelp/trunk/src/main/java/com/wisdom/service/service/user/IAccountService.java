@@ -39,6 +39,13 @@ public interface IAccountService {
     Account get(Account account);
 
     /**
+     * 根据主键获取
+     * @param id
+     * @return
+     */
+    Account get(Integer id);
+
+    /**
      * 保存修改
      * @param account
      */
