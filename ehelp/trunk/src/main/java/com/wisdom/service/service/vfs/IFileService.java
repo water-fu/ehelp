@@ -2,6 +2,7 @@ package com.wisdom.service.service.vfs;
 
 import com.wisdom.dao.entity.vfs.FileServerConfig;
 import com.wisdom.dao.entity.vfs.FileUploadRecord;
+import org.apache.commons.vfs2.FileObject;
 
 import java.io.File;
 import java.io.InputStream;
@@ -118,10 +119,18 @@ public interface IFileService {
 
 	/**
 	 * 从文件服务器下载文件
-	 * 
+	 *
 	 * @return 返回流对象InputStream
 	 */
 	public InputStream downloadFile(String fileid, Integer userid, FileServerConfig fileServerConfig)
+			throws Exception;
+
+	/**
+	 * 从文件服务器下载文件
+	 *
+	 * @return 返回流对象InputStream
+	 */
+	public FileObject downloadFile(String fileid, FileServerConfig fileServerConfig)
 			throws Exception;
 
 	/**

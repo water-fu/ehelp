@@ -40,9 +40,6 @@ public class PatientServiceImpl implements IPatientService {
     @Autowired
     private IFileService fileService;
 
-    @Autowired
-    private SessionCache sessionCache;
-
     /**
      * 根据accountId获取患者实名信息
      * @param patient
@@ -64,26 +61,52 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     /**
-     *
+     * 患者认证(微信浏览器)
      * @param patient
      * @param headImg
      * @param bodyImg
+     * @param sessionDetail
      */
     @Override
-    public void identification(Patient patient, byte[] headImg, byte[] bodyImg, String sessionId) {
+    public void identification(Patient patient, byte[] headImg, byte[] bodyImg, SessionDetail sessionDetail) {
+        try {
+            String headFileId = fileService.uploadFile(fileService.getServerConfig(), headImg, "jpg", sessionDetail.getAccountId() + "_" + System.currentTimeMillis() + "_" + Math.random(), sessionDetail.getAccountId(), false, true);
+            String bodyFileId = fileService.uploadFile(fileService.getServerConfig(), bodyImg, "jpg", sessionDetail.getAccountId() + "_" + System.currentTimeMillis() + "_" + Math.random(), sessionDetail.getAccountId(), false, true);
 
-        SessionDetail sessionDetail = (SessionDetail) sessionCache.get(sessionId);
-        String headFileId;
-        String bodyFileId;
+            insertIdentification(patient, headFileId, bodyFileId, sessionDetail);
+        } catch (Exception ex) {
+            throw new ApplicationException("文件上传失败", ex);
+        }
+    }
+
+    /**
+     * 患者认证(非微信浏览器)
+     * @param patient
+     * @param headFileId
+     * @param bodyFileId
+     */
+    @Override
+    public void identification(Patient patient, String headFileId, String bodyFileId, SessionDetail sessionDetail) {
 
         try {
-            headFileId = fileService.uploadFile(fileService.getServerConfig(), headImg, "jpg", sessionDetail.getAccountId() + "_" + System.currentTimeMillis() + "_" + Math.random(), sessionDetail.getAccountId(), false, true);
-            bodyFileId = fileService.uploadFile(fileService.getServerConfig(), bodyImg, "jpg", sessionDetail.getAccountId() + "_" + System.currentTimeMillis() + "_" + Math.random(), sessionDetail.getAccountId(), false, true);
-
+            // 把临时文件变成正式文件
+            fileService.tranFile(headFileId, sessionDetail.getAccountId(), fileService.getServerConfig());
+            fileService.tranFile(bodyFileId, sessionDetail.getAccountId(), fileService.getServerConfig());
         } catch (Exception ex) {
-            throw new ApplicationException("文件服务器异常", ex);
+            throw new ApplicationException("文件上传失败", ex);
         }
 
+        insertIdentification(patient, headFileId, bodyFileId, sessionDetail);
+    }
+
+    /**
+     * 插入认证信息
+     * @param patient
+     * @param headFileId
+     * @param bodyFileId
+     * @param sessionDetail
+     */
+    private void insertIdentification(Patient patient, String headFileId, String bodyFileId, SessionDetail sessionDetail) {
         patient.setAccountId(sessionDetail.getAccountId());
         patient.setSimplePinyin(Pinyin4jUtil.translate(patient.getName(), Pinyin4jUtil.RET_PINYIN_TYPE_HEADCHAR));
         patient.setIdPath(headFileId);

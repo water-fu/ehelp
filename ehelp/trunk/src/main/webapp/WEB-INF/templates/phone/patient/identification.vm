@@ -7,6 +7,12 @@
 
     #parse("sys_param.vm")
     #parse("addon/app/css.vm")
+
+    <script type="text/javascript">
+        if(!isWeChat) {
+            location.href= base + '/p/patient/identification_o';
+        }
+    </script>
 </head>
 <body>
 <div class="container">

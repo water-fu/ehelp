@@ -1,5 +1,6 @@
 package com.wisdom.service.service.user;
 
+import com.wisdom.common.entity.SessionDetail;
 import com.wisdom.dao.entity.Patient;
 
 /**
@@ -15,10 +16,18 @@ public interface IPatientService {
     Patient getAuditByAccountId(Patient patient);
 
     /**
-     * 患者认证
+     * 患者认证(微信浏览器)
      * @param patient
      * @param headImg
      * @param bodyImg
      */
-    void identification(Patient patient, byte[] headImg, byte[] bodyImg, String sessionId);
+    void identification(Patient patient, byte[] headImg, byte[] bodyImg, SessionDetail sessionDetail);
+
+    /**
+     * 患者认证(非微信浏览器)
+     * @param patient
+     * @param headImg
+     * @param bodyImg
+     */
+    void identification(Patient patient, String headImg, String bodyImg, SessionDetail sessionDetail);
 }

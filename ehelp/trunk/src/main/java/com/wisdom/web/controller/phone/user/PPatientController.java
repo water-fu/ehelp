@@ -1,9 +1,14 @@
 package com.wisdom.web.controller.phone.user;
 
+import com.wisdom.common.cache.SessionCache;
 import com.wisdom.common.entity.ResultBean;
+import com.wisdom.common.entity.SessionDetail;
+import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.CookieUtil;
 import com.wisdom.dao.entity.Patient;
 import com.wisdom.service.service.user.IPatientService;
+import com.wisdom.service.service.vfs.IFileService;
+import com.wisdom.service.service.vfs.impl.FileServiceImpl;
 import com.wisdom.weChat.service.IMediaService;
 import com.wisdom.web.common.BaseController;
 import com.wisdom.web.common.constants.CommonConstant;
@@ -36,6 +41,12 @@ public class PPatientController extends BaseController {
     @Autowired
     private IPatientService patientService;
 
+    @Autowired
+    private IFileService fileService;
+
+    @Autowired
+    private SessionCache sessionCache;
+
     /**
      * 注册成功页面
      * @return
@@ -46,7 +57,7 @@ public class PPatientController extends BaseController {
     }
 
     /**
-     * 认证页面
+     * 认证页面(微信浏览器)
      * @return
      */
     @RequestMapping(value = "identification", method = RequestMethod.GET)
@@ -55,7 +66,16 @@ public class PPatientController extends BaseController {
     }
 
     /**
-     * 患者认证页面
+     * 认证页面(非微信浏览器)
+     * @return
+     */
+    @RequestMapping(value = "identification_o", method = RequestMethod.GET)
+    public String identification_o() {
+        return String.format(VM_ROOT_PATH, "identification_o");
+    }
+
+    /**
+     * 患者认证(微信浏览器)
      * @param patient
      * @param headImg
      * @param bodyImg
@@ -68,11 +88,39 @@ public class PPatientController extends BaseController {
         try {
 
             Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+            SessionDetail sessionDetail = (SessionDetail) sessionCache.get(cookie.getValue());
 
+            // 从微信后台获取图片
             byte[] head = mediaDownload.getMediaFile(headImg);
             byte[] body = mediaDownload.getMediaFile(bodyImg);
 
-            patientService.identification(patient, head, body, cookie.getValue());
+            patientService.identification(patient, head, body, sessionDetail);
+
+            ResultBean resultBean = new ResultBean(true);
+
+            return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
+    }
+
+    /**
+     * 患者认证(非微信浏览器)
+     * @param patient
+     * @param headImg
+     * @param bodyImg
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "identification_o", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean identification_o(Patient patient, String headImg, String bodyImg, HttpServletRequest request) {
+        try {
+
+            Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+            SessionDetail sessionDetail = (SessionDetail) sessionCache.get(cookie.getValue());
+
+            patientService.identification(patient, headImg, bodyImg, sessionDetail);
 
             ResultBean resultBean = new ResultBean(true);
 

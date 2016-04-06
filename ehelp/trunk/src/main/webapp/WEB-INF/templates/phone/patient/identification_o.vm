@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>实名认证</title>
+
+    #parse("sys_param.vm")
+    #parse("addon/app/css.vm")
+
+##  不是微信客户端进行认证
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <header class="page_title">
+            <a href="$!{CONTEXT_PATH}/p/patient/success" class="fl"><i class="iconfont icon-errowleft"></i>取消</a>
+            <span>实名认证</span>
+        </header>
+        <div class="loginbox regis iden">
+            <form id="identifiForm">
+                <ul>
+                    <li>
+                        <label>姓名:</label>
+                        <input type="text" name="name" placeholder="请输入姓名"/>
+                    </li>
+                    <li>
+                        <label class="pass">身份证号:</label>
+                        <input type="text" name="idCode" placeholder="请输入身份证号"/>
+                    </li>
+                    <li class="up_pic">
+                        <a href="javascript:showHeadImg()">
+                            <img src="$!{CONTEXT_PATH}/file/imageDownload?fileId=R2016040523300415897" id="headImgTag" style="display: none; height: 72%; width: 80%">
+                            <i class="iconfont icon-camera headCamera"></i>
+                            <p>手持身份证头部照</p>
+                        </a>
+                        <a href="javascript:showBodyImg()">
+                            <img src="" id="bodyImgTag" style="display: none; height: 72%; width: 80%">
+                            <i class="iconfont icon-camera bodyCamera"></i>
+                            <p>半身照</p>
+                        </a>
+                    </li>
+                </ul>
+
+                <input type="hidden" name="headImg" id="headImg" >
+                <input type="hidden" name="bodyImg" id="bodyImg" >
+            </form>
+
+            <form id="headForm">
+                <input type="file" id="headImgInput" name="file" accept="image/*" style="display: none;">
+            </form>
+
+            <form id="bodyForm">
+                <input type="file" id="bodyImgInput" name="file" accept="image/*" style="display: none;">
+            </form>
+
+            <button class="btn btn-login" onclick="">保存</button>
+        </div>
+        <div class="service">
+            <img src="$!{CONTEXT_PATH}/static/app/image/serv.png" alt="客服" />
+            <div>
+                <p class="num">400-158-1616</p>
+                <p class="tl">服务时间: 9:00-20:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+#parse("addon/wxutil.vm")
+<script type="text/javascript">
+    $(function() {
+        // 图片上传
+        $('#headImgInput').change(function() {
+            if($(this).val() != '') {
+                var formData = new FormData($('#headForm')[0]);
+
+                $.ajax({
+                    url: base + '/file/fileUpload',
+                    contentType: false, //必须
+                    type: 'post',
+                    data: formData,
+                    processData: false, //必须
+                    enctype: 'multipart/form-data',
+                    success: function(data) {
+                        if(data.flag) {
+                            console.log(data.data);
+                            $('#headImgTag').attr('src', base + '/file/imageDownload?fileId=' + data.data);
+                            $('#headImg').val(data.data);
+
+                            $('#headImgTag').show();
+                            $('.headCamera').hide();
+                        } else {
+                            ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                        }
+                    },
+                    error: function() {
+                        alert('网络异常，请稍后再试');
+                    }
+                });
+            }
+        });
+
+        $('#headImgTag').show();
+        $('.headCamera').hide();
+
+        $('#bodyImgInput').change(function() {
+            if($(this).val() != '') {
+                var formData = new FormData($('#bodyForm')[0]);
+
+                $.ajax({
+                    url: base + '/file/fileUpload',
+                    contentType: false, //必须
+                    type: 'post',
+                    data: formData,
+                    processData: false, //必须
+                    enctype: 'multipart/form-data',
+                    success: function(data) {
+                        if(data.flag) {
+                            console.log(data.data);
+                            $('#bodyImgTag').attr('src', base + '/file/imageDownload?fileId=' + data.data);
+                            $('#bodyImg').val(data.data);
+
+                            $('#bodyImgTag').show();
+                            $('.bodyCamera').hide();
+                        } else {
+                            ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                        }
+                    },
+                    error: function() {
+                        alert('网络异常，请稍后再试');
+                    }
+                });
+            }
+        });
+
+        // 保存
+        $('.btn-login').bind('click', save);
+    });
+
+    // 保存
+    function save() {
+
+        var name = $('#identifiForm').find('input[name="name"]').val();
+        if(name == '') {
+            alert('请输入姓名');
+            return;
+        }
+
+        var idCode = $('#identifiForm').find('input[name="idCode"]').val();
+        if(idCode == '') {
+            alert('请输入身份证号');
+            return;
+        }
+
+        var headLocalId = $('#headLocalId').val();
+        if(headLocalId == '') {
+            alert('请选择手持身份证头部照');
+            return;
+        }
+
+        var bodyLocalId = $('#bodyLocalId').val();
+        if(bodyLocalId == '') {
+            alert('请选择半身照');
+            return;
+        }
+
+        $('.btn-login').addClass('btn-gray');
+        $('.btn-login').unbind('click');
+
+        $('.btn-login').html('正在保存');
+
+        $.ajax({
+            url: base + '/p/patient/identification_o',
+            data: $('#identifiForm').serialize(),
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('网络异常，请稍后再试');
+
+                $('.btn-login').html('保存');
+                $('.btn-login').removeClass('btn-gray');
+                $('.btn-login').bind('click', save);
+            },
+            success: function(data) {
+                if(data.flag) {
+                    location.href = '$!{CONTEXT_PATH}/p/patient/index';
+                } else {
+                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+
+                    $('.btn-login').html('保存');
+                    $('.btn-login').removeClass('btn-gray');
+                    $('.btn-login').bind('click', save);
+
+                }
+            }
+        });
+    }
+
+    function showHeadImg() {
+        $('#headImgInput').click();
+    }
+
+    function showBodyImg() {
+        $('#bodyImgInput').click();
+    }
+</script>

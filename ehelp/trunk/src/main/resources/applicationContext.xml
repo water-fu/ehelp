@@ -149,7 +149,7 @@
 
 	<bean id="connectionFactory"
 		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		  p:hostName="${redis.host}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
+		  p:hostName="${redis.host}" p:password="${redis.password}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
 		  p:database="${redis.database}" />
 
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
@@ -159,7 +159,7 @@
 	<!-- 基本参数-->
 	<bean id="paramConnectionFactory"
 		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		  p:hostName="${redis.host}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
+		  p:hostName="${redis.host}" p:password="${redis.password}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
 		  p:database="1" />
 
 	<bean id="paramRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
@@ -169,7 +169,7 @@
 	<!-- session-->
 	<bean id="connectionFactory02"
 		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		  p:hostName="${redis.host}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
+		  p:hostName="${redis.host}" p:password="${redis.password}" p:port="${redis.port}" p:poolConfig-ref="poolConfig"
 		  p:database="2" />
 
 	<bean id="sessionRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
