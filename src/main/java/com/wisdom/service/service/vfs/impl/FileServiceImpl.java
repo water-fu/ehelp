@@ -17,6 +17,7 @@ import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.VfsUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -328,7 +329,8 @@ public class FileServiceImpl implements IFileService {
 			if (!vfsFile.exists()) {
 				throw new Exception("文件不存在");
 			}
-			return vfsFile.getContent().getInputStream();
+			InputStream inputStream = vfsFile.getContent().getInputStream();
+			return inputStream;
 
 		} catch (FileSystemException e) {
 			throw e;
@@ -338,7 +340,7 @@ public class FileServiceImpl implements IFileService {
 		} finally {
 			try {
 				if (vfsFile != null) {
-					vfsFile.close();
+//					vfsFile.close();
 					// 记录file_upload_record
 					FileUploadRecord record = new FileUploadRecord();
 					record.setFileId(fileid);
@@ -351,6 +353,52 @@ public class FileServiceImpl implements IFileService {
 					record.setOptrDate(new Timestamp(new Date().getTime()));
 					fileUploadRecordMapper.insert(record);
 
+				}
+			} catch (Exception e) {
+
+			}
+		}
+	}
+
+	@Override
+	public FileObject downloadFile(String fileid, FileServerConfig fileServerConfig) throws Exception {
+		/**
+		 * 如果需要可以在这个地方增加权限校验，判断是否能够查看这个文件
+		 */
+		FileUploadInfo fileUploadInfo = fileUploadInfoMapper.selectByPrimaryKey(fileid);
+
+		if (fileUploadInfo == null) {
+			throw new Exception("无文件记录");
+		}
+		FileObject vfsFile = null;
+		try {
+			String uri = genVFSURI(fileid, fileUploadInfo.getFileExt(), fileUploadInfo.getFilePath(), fileServerConfig);
+			FileSystemManager fsManager = VFS.getManager();
+
+			if ("sftp".equals(fileServerConfig.getProtocol().toLowerCase())) {
+				FileSystemOptions fileSystemOptions = new FileSystemOptions();
+				SftpFileSystemConfigBuilder.getInstance().setUserDirIsRoot(fileSystemOptions, false);
+
+				vfsFile = fsManager.resolveFile(uri, fileSystemOptions);
+			} else {
+				vfsFile = fsManager.resolveFile(uri);
+			}
+
+			if (!vfsFile.exists()) {
+				throw new Exception("文件不存在");
+			}
+
+			return vfsFile;
+
+		} catch (FileSystemException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				if (vfsFile != null) {
+					vfsFile.close();
 				}
 			} catch (Exception e) {
 
@@ -585,7 +633,12 @@ public class FileServiceImpl implements IFileService {
 
 			uri.append(protocol).append("://").append(user).append(":")
 					.append(UriParser.encode(passwd)).append("@").append(ip).append(":")
-					.append(port).append(root).append("/").append(path)
+					.append(port);
+			if(!path.contains(root)) {
+				uri.append(root).append("/");
+			}
+
+			uri.append(path)
 					.append("/").append(fileName);
 
 		}

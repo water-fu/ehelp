@@ -74,7 +74,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return loginTimeOut(request, response, url);
         } else {
             String key = cookie.getValue();
-            logger.error("cookie:" + key);
+//            logger.error("cookie:" + key);
             // redis的session过期
             Object obj = sessionCache.get(key);
             if(obj == null) {
