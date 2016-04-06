@@ -64,7 +64,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean login(String userName, String password, HttpServletResponse response) {
+    public ResultBean login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
         try {
             Account account = new Account();
             account.setPhoneNo(userName);
@@ -83,7 +83,13 @@ public class UserController extends BaseController {
                 sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
-                String value = UUID.randomUUID().toString();
+                Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+                String value;
+                if(cookie != null) {
+                    value = cookie.getValue();
+                } else {
+                    value = UUID.randomUUID().toString();
+                }
                 CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
 
                 // 把用户登陆信息存入redis

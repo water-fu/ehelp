@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean register(Account account, String code, HttpServletResponse response) {
+    public ResultBean register(Account account, String code, HttpServletRequest request, HttpServletResponse response) {
         try {
 
             // 校验验证码是否正确
@@ -83,7 +85,13 @@ public class PUserController extends BaseController {
                 sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
-                String value = UUID.randomUUID().toString();
+                Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+                String value;
+                if(cookie != null) {
+                    value = cookie.getValue();
+                } else {
+                    value = UUID.randomUUID().toString();
+                }
                 CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
 
                 // 把用户登陆信息存入redis
@@ -145,7 +153,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultBean login(Account account, HttpServletResponse response) {
+    public ResultBean login(Account account, HttpServletRequest request, HttpServletResponse response) {
         try {
 
             account = accountService.login(account);
@@ -161,7 +169,13 @@ public class PUserController extends BaseController {
                 sessionDetail.setFrom(SysParamDetailConstant.LOGIN_FROM_SYSTEM);
 
                 // 把redis的key存入cookie，有效期1天
-                String value = UUID.randomUUID().toString();
+                Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+                String value;
+                if(cookie != null) {
+                    value = cookie.getValue();
+                } else {
+                    value = UUID.randomUUID().toString();
+                }
                 CookieUtil.addCookie(response, CommonConstant.COOKIE_VALUE, value, CommonConstant.SESSION_TIME_OUT_DAY);
 
                 // 把用户登陆信息存入redis

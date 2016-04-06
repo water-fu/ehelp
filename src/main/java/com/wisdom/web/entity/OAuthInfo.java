@@ -9,17 +9,17 @@ public class OAuthInfo {
     /**
      * 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
      */
-    private String accessToken;
+    private String access_token;
 
     /**
      * access_token接口调用凭证超时时间，单位（秒）
      */
-    private Integer expiresIn;
+    private Integer expires_in;
 
     /**
      * 用户刷新access_token
      */
-    private String refreshToken;
+    private String refresh_token;
 
     /**
      * 用户唯一标识，请注意，在未关注公众号时，用户访问公众号的网页，也会产生一个用户和公众号唯一的OpenID
@@ -36,28 +36,28 @@ public class OAuthInfo {
      */
     private String unionid;
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getAccess_token() {
+        return access_token;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
     }
 
-    public Integer getExpiresIn() {
-        return expiresIn;
+    public Integer getExpires_in() {
+        return expires_in;
     }
 
-    public void setExpiresIn(Integer expiresIn) {
-        this.expiresIn = expiresIn;
+    public void setExpires_in(Integer expires_in) {
+        this.expires_in = expires_in;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getRefresh_token() {
+        return refresh_token;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 
     public String getOpenid() {
