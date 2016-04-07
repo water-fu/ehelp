@@ -1,5 +1,6 @@
 package com.wisdom.web.controller.system;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.entity.SessionDetail;
@@ -42,6 +43,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = {"", "/", "login"}, method = RequestMethod.GET)
+    @Check(loginCheck = false)
     public String index() {
         return String.format(MANAGER_VM_ROOT, "login");
     }
@@ -51,6 +53,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = {"toLogin"}, method = RequestMethod.GET)
+    @Check(loginCheck = false)
     public String toLogin() {
         return String.format(MANAGER_VM_ROOT, "login");
     }
@@ -64,6 +67,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
         try {
             Account account = new Account();
@@ -115,6 +119,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean logout(HttpServletRequest request, HttpServletResponse response) {
         try {
 

@@ -53,7 +53,7 @@ public class WeChatLoginServiceImpl implements IWeChatLoginService {
      * @param request
      */
     @Override
-    public WeChatLogin login(String code, HttpServletRequest request) {
+    public WeChatLogin login(String code, String type, HttpServletRequest request) {
         InputStream inputStream = null;
         try {
             // 用户授权后获取用户信息
@@ -89,6 +89,7 @@ public class WeChatLoginServiceImpl implements IWeChatLoginService {
                 weChatLogin.setCity(jsonObject.getString("city"));
                 weChatLogin.setCountry(jsonObject.getString("country"));
                 weChatLogin.setHeadimgUrl(jsonObject.getString("headimgurl"));
+                weChatLogin.setAccountType(type);
                 weChatLogin.setLoginIp(RequestUtil.getIP(request));
                 weChatLogin.setLoginTime(DateUtil.getTimestamp());
 
@@ -116,7 +117,7 @@ public class WeChatLoginServiceImpl implements IWeChatLoginService {
             return weChatLogin;
 
         } catch (Exception ex) {
-            throw new ApplicationException("获取ACCESS_TOKEN异常", ex);
+            throw new ApplicationException("微信登陆异常:" + ex.getMessage(), ex);
         } finally {
             if(inputStream != null) {
                 try {

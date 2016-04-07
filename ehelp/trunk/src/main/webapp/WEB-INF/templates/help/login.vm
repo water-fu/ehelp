@@ -14,7 +14,7 @@
 
     <script type="text/javascript">
         // 跳转手机登陆页面
-        to_phone('$!{CONTEXT_PATH}/p/login?type=$!{request.getParameter("type")}');
+        to_phone('$!{CONTEXT_PATH}/p/1/login');
     </script>
 
     <link href="$!{CONTEXT_PATH}/static/css/login.css" rel="stylesheet">

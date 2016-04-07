@@ -1,5 +1,6 @@
 package com.wisdom.web.controller.common;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.exception.ApplicationException;
@@ -38,6 +39,7 @@ public class IdentifyCodeController extends BaseController {
      */
     @RequestMapping(value = "sendCode", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean sendIdentifyCode(String phoneNo, String type, HttpServletRequest request) {
         try {
             if(!StringUtil.isNotEmptyObject(phoneNo)) {
@@ -72,6 +74,7 @@ public class IdentifyCodeController extends BaseController {
      */
     @RequestMapping(value = "validIdentifyCode", method = RequestMethod.GET)
     @ResponseBody
+    @Check(loginCheck = false)
     public List validIdentifyCode(String fieldId, String fieldValue, String phoneNo) {
         List result = new ArrayList();
         result.add(fieldId);

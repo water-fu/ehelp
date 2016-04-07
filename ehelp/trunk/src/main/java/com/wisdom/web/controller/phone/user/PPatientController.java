@@ -1,14 +1,12 @@
 package com.wisdom.web.controller.phone.user;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.entity.SessionDetail;
-import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.CookieUtil;
 import com.wisdom.dao.entity.Patient;
 import com.wisdom.service.service.user.IPatientService;
-import com.wisdom.service.service.vfs.IFileService;
-import com.wisdom.service.service.vfs.impl.FileServiceImpl;
 import com.wisdom.weChat.service.IMediaService;
 import com.wisdom.web.common.BaseController;
 import com.wisdom.web.common.constants.CommonConstant;
@@ -42,9 +40,6 @@ public class PPatientController extends BaseController {
     private IPatientService patientService;
 
     @Autowired
-    private IFileService fileService;
-
-    @Autowired
     private SessionCache sessionCache;
 
     /**
@@ -61,6 +56,7 @@ public class PPatientController extends BaseController {
      * @return
      */
     @RequestMapping(value = "identification", method = RequestMethod.GET)
+    @Check(phoneCheck = true)
     public String identification() {
         return String.format(VM_ROOT_PATH, "identification");
     }
@@ -70,6 +66,7 @@ public class PPatientController extends BaseController {
      * @return
      */
     @RequestMapping(value = "identification_o", method = RequestMethod.GET)
+    @Check(phoneCheck = true)
     public String identification_o() {
         return String.format(VM_ROOT_PATH, "identification_o");
     }

@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row">
         <header>
-            <a href="$!{CONTEXT_PATH}/p/register" class="fr">快速注册<i class="iconfont icon-shuangjiantou"></i></a>
+            <a href="$!{CONTEXT_PATH}/p/$!{type}/register" class="fr">快速注册<i class="iconfont icon-shuangjiantou"></i></a>
         </header>
         <div class="banner">
             <img src="$!{CONTEXT_PATH}/static/app/image/m_logo.png" alt="logo" />
@@ -37,7 +37,7 @@
         <div class="link">
             <p>第三方账户登录</p>
             <div class="list">
-                <a href="$!{CONTEXT_PATH}/weChatLogin/login" class="weixin"><i class="iconfont icon-weixin"></i></a>
+                <a href="$!{CONTEXT_PATH}/weChatLogin/login?type=$!{type}" class="weixin"><i class="iconfont icon-weixin"></i></a>
                 <a href="#" class="weibo"><i class="iconfont icon-weibo"></i></a>
                 <a href="#" class="qq"><i class="iconfont icon-qq"></i></a>
             </div>
@@ -107,7 +107,7 @@
             },
             success: function(data) {
                 if(data.flag) {
-                    location.href = '$!{CONTEXT_PATH}/p/patient/success';
+                    location.href = '$!{CONTEXT_PATH}/p/patient/index';
                 } else {
                     ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
                     $('#login').removeClass('btn-gray');
