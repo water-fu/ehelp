@@ -1,5 +1,6 @@
 package com.wisdom.web.controller.phone.system;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
 import com.wisdom.common.entity.SessionDetail;
 import com.wisdom.common.util.CookieUtil;
@@ -67,13 +68,15 @@ public class WeChatLoginController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "login", method = RequestMethod.GET)
-    public void login(HttpServletRequest request, HttpServletResponse response) {
+    @Check(loginCheck = false)
+    public void login(String type, HttpServletRequest request, HttpServletResponse response) {
         try {
             StringBuffer sb = new StringBuffer();
             // 微信回调路径
             sb.append("http://").append(request.getServerName())
                     .append(request.getContextPath())
-                    .append("/weChatLogin").append("/loginCall");
+                    .append("/weChatLogin").append("/loginCall")
+                    .append("?type=").append(type);
 
             String url = LoginUrlConstants.WE_CHAT_LOGIN.replace("APPID", weChatSetting.getAppId())
                     .replace("REDIRECT_URI", URLEncoder.encode(sb.toString(), ENCODE))
@@ -97,10 +100,14 @@ public class WeChatLoginController extends BaseController {
      * @return
      */
     @RequestMapping(value = "loginCall", method = RequestMethod.GET)
-    public ModelAndView login(@RequestParam(value = "code", required = false) String code, @RequestParam("state") String state, HttpServletRequest request, HttpServletResponse response) {
+    @Check(loginCheck = false)
+    public ModelAndView login(@RequestParam(value = "code", required = false) String code, @RequestParam("state") String state, String type, HttpServletRequest request, HttpServletResponse response) {
         try {
-            logger.info("code:" + code);
-            logger.info("state:" + state);
+            if(logger.isDebugEnabled()) {
+                logger.debug("code:" + code);
+                logger.debug("state:" + state);
+                logger.debug("type:" + type);
+            }
 
             if(!StringUtil.isNotEmptyObject(code)) {
                 return new ModelAndView("redirect:/");
@@ -110,7 +117,7 @@ public class WeChatLoginController extends BaseController {
                 return new ModelAndView("redirect:/");
             }
 
-            WeChatLogin weChatLogin = weChatLoginService.login(code, request);
+            WeChatLogin weChatLogin = weChatLoginService.login(code, type, request);
 
             Account account = null;
             if(null != weChatLogin.getAccountId()) {
@@ -130,6 +137,7 @@ public class WeChatLoginController extends BaseController {
                 } else {
                     sessionDetail.setName(weChatLogin.getNickName());
                     sessionDetail.setStatus(SysParamDetailConstant.ACCOUNT_STATUS_NEW);
+                    sessionDetail.setType(weChatLogin.getAccountType());
                 }
 
                 sessionDetail.setWeChatLogin(weChatLogin);

@@ -1,5 +1,6 @@
 package com.wisdom.weChat.controller;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.weChat.config.WeChatSetting;
 import com.wisdom.weChat.entity.JsapiTicket;
@@ -43,6 +44,7 @@ public class WeChatController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
+    @Check(loginCheck = false)
     public String doGet(HttpServletRequest request) throws Exception {
         String signature = request.getParameter("signature");
         String timestamp = request.getParameter("timestamp");
@@ -64,6 +66,7 @@ public class WeChatController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public String doPost(HttpServletRequest request) throws Exception {
 
         return "";
@@ -75,6 +78,7 @@ public class WeChatController extends BaseController {
      */
     @RequestMapping(value = "getWeChatConfigParam", method = RequestMethod.GET)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean getWeChatConfigParam(String url) {
         try {
             Map map = jsapiTicketService.sign(url);

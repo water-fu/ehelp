@@ -1,5 +1,6 @@
 package com.wisdom.web.controller.phone.user;
 
+import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
 import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.web.common.constants.SysParamDetailConstant;
@@ -16,9 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -49,9 +53,12 @@ public class PUserController extends BaseController {
      * 注册页面
      * @return
      */
-    @RequestMapping(value = "register", method = RequestMethod.GET)
-    public String register() {
-        return String.format(PHONE_VM_ROOT, "register");
+    @RequestMapping(value = "{type}/register", method = RequestMethod.GET)
+    @Check(loginCheck = false)
+    public ModelAndView register(Model model, @PathVariable("type") String type) {
+        model.addAttribute("type", type);
+
+        return new ModelAndView(String.format(PHONE_VM_ROOT, "register"));
     }
 
     /**
@@ -62,6 +69,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean register(Account account, String code, HttpServletRequest request, HttpServletResponse response) {
         try {
 
@@ -116,6 +124,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "validPhoneNo", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public List validPhoneNo(String fieldId, String fieldValue) {
         List result = new ArrayList();
         result.add(fieldId);
@@ -141,9 +150,13 @@ public class PUserController extends BaseController {
      * 登陆页面
      * @return
      */
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String login() {
-        return String.format(PHONE_VM_ROOT, "login");
+    @RequestMapping(value = "{type}/login", method = RequestMethod.GET)
+    @Check(loginCheck = false)
+    public ModelAndView login(Model model, @PathVariable("type") String type) {
+
+        model.addAttribute("type", type);
+
+        return new ModelAndView(String.format(PHONE_VM_ROOT, "login"));
     }
 
     /**
@@ -153,6 +166,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean login(Account account, HttpServletRequest request, HttpServletResponse response) {
         try {
 
@@ -194,19 +208,11 @@ public class PUserController extends BaseController {
     }
 
     /**
-     * 注册完成选择页面
-     * @return
-     */
-    @RequestMapping(value = "choose", method = RequestMethod.GET)
-    public String choose() {
-        return String.format(PHONE_VM_ROOT, "choose");
-    }
-
-    /**
      * 忘记密码页面
      * @return
      */
     @RequestMapping(value = "forget", method = RequestMethod.GET)
+    @Check(loginCheck = false)
     public String forget() {
         return String.format(PHONE_VM_ROOT, "forget");
     }
@@ -218,6 +224,7 @@ public class PUserController extends BaseController {
      */
     @RequestMapping(value = "forget", method = RequestMethod.POST)
     @ResponseBody
+    @Check(loginCheck = false)
     public ResultBean forget(Account account, String code) {
         try {
             // 校验验证码是否正确

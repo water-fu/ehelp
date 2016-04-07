@@ -14,5 +14,5 @@ public interface IWeChatLoginService {
      * @param code
      * @param request
      */
-    WeChatLogin login(String code, HttpServletRequest request);
+    WeChatLogin login(String code, String type, HttpServletRequest request);
 }

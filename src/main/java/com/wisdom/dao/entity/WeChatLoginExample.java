@@ -408,6 +408,76 @@ public class WeChatLoginExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andAccountTypeIsNull() {
+            addCriterion("ACCOUNT_TYPE is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeIsNotNull() {
+            addCriterion("ACCOUNT_TYPE is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeEqualTo(String value) {
+            addCriterion("ACCOUNT_TYPE =", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotEqualTo(String value) {
+            addCriterion("ACCOUNT_TYPE <>", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeGreaterThan(String value) {
+            addCriterion("ACCOUNT_TYPE >", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("ACCOUNT_TYPE >=", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLessThan(String value) {
+            addCriterion("ACCOUNT_TYPE <", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLessThanOrEqualTo(String value) {
+            addCriterion("ACCOUNT_TYPE <=", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeLike(String value) {
+            addCriterion("ACCOUNT_TYPE like", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotLike(String value) {
+            addCriterion("ACCOUNT_TYPE not like", value, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeIn(List<String> values) {
+            addCriterion("ACCOUNT_TYPE in", values, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotIn(List<String> values) {
+            addCriterion("ACCOUNT_TYPE not in", values, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeBetween(String value1, String value2) {
+            addCriterion("ACCOUNT_TYPE between", value1, value2, "accountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccountTypeNotBetween(String value1, String value2) {
+            addCriterion("ACCOUNT_TYPE not between", value1, value2, "accountType");
+            return (Criteria) this;
+        }
+
         public Criteria andWechatIdIsNull() {
             addCriterion("WECHAT_ID is null");
             return (Criteria) this;
