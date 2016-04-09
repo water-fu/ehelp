@@ -45,8 +45,10 @@
 		<property name="username">
 			<value>${jdbc.username}</value>
 		</property>
-		<property name="password">
-			<value>${jdbc.password}</value>
+		<property name="passwordCallback">
+			<bean class="com.wisdom.common.datasource.DatabasePasswordCallback">
+				<property name="password" value="${jdbc.password}" />
+			</bean>
 		</property>
 		<!-- 连接池最大使用连接数 -->
 		<property name="maxActive">

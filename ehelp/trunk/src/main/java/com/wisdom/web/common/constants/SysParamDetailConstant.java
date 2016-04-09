@@ -75,7 +75,7 @@ public class SysParamDetailConstant {
 
     public static final String IDENTIFY_TYPE_FOTGET = "2"; // 忘记密码
 
-    public static final String IDENTIFY_TYPE_BIND = "3"; // 微信绑定
+    public static final String IDENTIFY_TYPE_BIND = "3"; // 账号绑定
 
     /**
      * 患者状态

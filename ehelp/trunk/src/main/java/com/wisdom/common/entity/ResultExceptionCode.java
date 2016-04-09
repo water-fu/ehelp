@@ -6,7 +6,15 @@ package com.wisdom.common.entity;
  */
 public class ResultExceptionCode {
 
+    /**
+     * 异常编号
+     */
     private String code;
+
+    /**
+     * 异常对应的url
+     */
+    private String url;
 
     public String getCode() {
         return code;
@@ -14,5 +22,13 @@ public class ResultExceptionCode {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -2,6 +2,7 @@ package com.wisdom.web.controller.phone.user;
 
 import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
+import com.wisdom.mapp.core.annotation.Response;
 import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.ResultBean;
@@ -110,6 +111,7 @@ public class PUserController extends BaseController {
             }
 
             ResultBean resultBean = new ResultBean(true);
+            resultBean.setData(transType(account.getType()));
 
             return resultBean;
         } catch (Exception ex) {
@@ -200,6 +202,7 @@ public class PUserController extends BaseController {
             }
 
             ResultBean resultBean = new ResultBean(true);
+            resultBean.setData(transType(account.getType()));
 
             return resultBean;
         } catch (Exception ex) {
@@ -237,8 +240,57 @@ public class PUserController extends BaseController {
             account = accountService.forget(account);
 
             ResultBean resultBean = new ResultBean(true);
+            resultBean.setData(transType(account.getType()));
 
             return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
+    }
+
+    /**
+     * 账号绑定
+     * @return
+     */
+    @RequestMapping(value = "{type}/bind", method = RequestMethod.GET)
+    public ModelAndView bind(Model model, @PathVariable("type") String type) {
+        model.addAttribute("type", type);
+
+        return new ModelAndView(String.format(PHONE_VM_ROOT, "bind"));
+    }
+
+    /**
+     * 账号绑定
+     * @return
+     */
+    @RequestMapping(value = "bind", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultBean bind(Account account, String code, HttpServletRequest request, HttpServletResponse response) {
+        try {
+
+            // 校验验证码是否正确
+            Boolean flag = identifyCodeService.validIdentifyCode(account.getPhoneNo(), code, SysParamDetailConstant.IDENTIFY_TYPE_BIND);
+            if(!flag) {
+                throw new ApplicationException("验证码错误");
+            }
+
+            Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+            SessionDetail sessionDetail = (SessionDetail) sessionCache.get(cookie.getValue());
+
+            account = accountService.bind(account, sessionDetail);
+
+            // 更新session内容
+            sessionDetail.setAccountId(account.getId());
+            sessionDetail.setPhoneNo(account.getPhoneNo());
+            sessionDetail.setStatus(account.getStatus());
+
+            sessionCache.put(cookie.getValue(), sessionDetail, CommonConstant.SESSION_TIME_OUT_DAY);
+
+            ResultBean resultBean = new ResultBean(true);
+            resultBean.setData(transType(account.getType()));
+
+            return resultBean;
+
         } catch (Exception ex) {
             return ajaxException(ex);
         }

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    #parse("sys_param.vm")
+
     <meta charset="UTF-8">
     <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>登录</title>
+    <title>$!{TITLE}</title>
 
-    #parse("sys_param.vm")
     #parse("addon/app/css.vm")
 </head>
 <body>
@@ -22,7 +23,7 @@
                 <ul>
                     <li>
                         <label>手机号:</label>
-                        <input type="text" name="phoneNo" placeholder="请输入正确有效的手机号"/>
+                        <input type="number" name="phoneNo" placeholder="请输入正确有效的手机号"/>
                     </li>
                     <li>
                         <label class="pass">密&nbsp;&nbsp;&nbsp;码:</label>
@@ -107,9 +108,9 @@
             },
             success: function(data) {
                 if(data.flag) {
-                    location.href = '$!{CONTEXT_PATH}/p/patient/index';
+                    location.href = '$!{CONTEXT_PATH}/p/' + data.data + '/index';
                 } else {
-                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                    ajaxErrorCallBack(data);
                     $('#login').removeClass('btn-gray');
                     $('#login').bind('click', login);
 

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    #parse("sys_param.vm")
+
     <meta charset="UTF-8">
     <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>实名认证</title>
+    <title>$!{TITLE}</title>
 
-    #parse("sys_param.vm")
     #parse("addon/app/css.vm")
 
 ##  不是微信客户端进行认证
@@ -85,14 +86,14 @@
                     enctype: 'multipart/form-data',
                     success: function(data) {
                         if(data.flag) {
-                            console.log(data.data);
+
                             $('#headImgTag').attr('src', base + '/file/imageDownload?fileId=' + data.data);
                             $('#headImg').val(data.data);
 
                             $('#headImgTag').show();
                             $('.headCamera').hide();
                         } else {
-                            ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                            ajaxErrorCallBack(data);
                         }
                     },
                     error: function() {
@@ -125,7 +126,7 @@
                             $('#bodyImgTag').show();
                             $('.bodyCamera').hide();
                         } else {
-                            ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                            ajaxErrorCallBack(data);
                         }
                     },
                     error: function() {
@@ -186,7 +187,7 @@
                 if(data.flag) {
                     location.href = '$!{CONTEXT_PATH}/p/patient/index';
                 } else {
-                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
+                    ajaxErrorCallBack(data);
 
                     $('.btn-login').html('保存');
                     $('.btn-login').removeClass('btn-gray');

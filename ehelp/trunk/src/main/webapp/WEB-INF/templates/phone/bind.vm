@@ -13,10 +13,10 @@
 <div class="container">
     <div class="row">
         <header>
-            <a href="$!{CONTEXT_PATH}/p/$!{type}/login" class="fr">登录<i class="iconfont icon-shuangjiantou"></i></a>
+            <a href="javascript:history.go(-1)" class="fl"><i class="iconfont icon-shuangjiantouzuo"></i>取消</a>
         </header>
         <div class="banner">
-            <h3>欢迎注册E帮护</h3>
+            <h3>手机号码绑定</h3>
         </div>
         <div class="loginbox regis">
             <form id="registerForm">
@@ -27,11 +27,11 @@
                         <label>手机号:</label>
                         <input type="number" name="phoneNo" placeholder="请输入正确有效的手机号"/>
                     </li>
-                    <li>
-                        <label class="pass">密&nbsp;&nbsp;&nbsp;码:</label>
-                        <input type="password" name="password" id="password" placeholder="6-20位字母、数字或符号"/>
-                        <i class="iconfont icon-eye look_pass passShow" state="1"></i>
-                    </li>
+##                    <li>
+##                        <label class="pass">密&nbsp;&nbsp;&nbsp;码:</label>
+##                        <input type="password" name="password" id="password" placeholder="6-20位字母、数字或符号"/>
+##                        <i class="iconfont icon-eye look_pass passShow" state="1"></i>
+##                    </li>
                     <li>
                         <label class="pass">验证码:</label>
                         <input type="number" name="code" placeholder="请输入验证码"/>
@@ -39,8 +39,8 @@
                     </li>
                 </ul>
             </form>
-            <button class="btn btn-login" id="register">注册</button>
-            <p class="agreement">注册即表示您已同意<a href="#">用户服务协议</a></p>
+            <button class="btn btn-login" id="register">绑定</button>
+##            <p class="agreement">注册即表示您已同意<a href="#">用户服务协议</a></p>
         </div>
         <div class="service">
             <img src="$!{CONTEXT_PATH}/static/app/image/serv.png" alt="客服" />
@@ -90,10 +90,10 @@
         $('.sendCode').unbind('click');
 
         $.ajax({
-            url: base + '/identifyCode/sendCode',
+            url: base + '/identifyCode/bindSendCode',
             data: {
                 'phoneNo': phoneNo,
-                'type' : 1 // 表示注册
+                'type' : 3 // 表示账号绑定
             },
             type: 'post',
             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -109,7 +109,7 @@
                     setTime();
 
                 } else {
-                    ajaxErrorCallBack(data, '');
+                    ajaxErrorCallBack(data, '$!{CONTEXT_PATH}/p/login');
 
                     $('.sendCode').bind('click', sendCode);
                     $('.sendCode').html('获取验证码');
@@ -170,7 +170,7 @@
         $('#register').unbind('click');
 
         $.ajax({
-            url: base + '/p/register',
+            url: base + '/p/bind',
             data: $('#registerForm').serialize(),
             type: 'post',
             error: function(XMLHttpRequest, textStatus, errorThrown) {
