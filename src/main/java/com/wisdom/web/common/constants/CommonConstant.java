@@ -66,4 +66,13 @@ public class CommonConstant {
      */
     public static final String LIST_TYPE = "list";
 
+    /**
+     * 数据库加密密钥
+     */
+    public static final String DB_SALT = "024ff0ff-3100-4d6c-8927-2c559ceb63f3";
+
+    /**
+     * 验证码
+     */
+    public static final String DEFAULT_IDENTIFY_CODE = "123456";
 }

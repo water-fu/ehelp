@@ -23,7 +23,7 @@
   
   
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">  
-      <level>DEBUG</level>
+      <level>INFO</level>
     </filter>  
     <!-- Safely log to the same file from multiple JVMs. Degrades performance! -->  
     <prudent>true</prudent>  
@@ -69,7 +69,7 @@
       </encoder>  
     <!-- Only log level WARN and above -->  
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">  
-      <level>DEBUG</level>  
+      <level>DEBUG</level>
     </filter>  
   </appender>  
   
@@ -83,6 +83,6 @@
   </root>
   
   <!-- For loggers in the these namespaces, log at all levels. -->  
-  <logger name="org.apache.http" level="DEBUG" />
+  <logger name="org.apache.http" level="INFO" />
   <logger name="com.wisdom" level="DEBUG" />
 </configuration>

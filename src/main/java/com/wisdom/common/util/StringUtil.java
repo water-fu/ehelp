@@ -58,9 +58,8 @@ public class StringUtil {
      * @return
      */
     public static String genIdentifyCode() {
-        return "123456";
-//        Integer code = (int)((Math.random() * 9 + 1) * 100000);
-//        return code.toString();
+        Integer code = (int)((Math.random() * 9 + 1) * 100000);
+        return code.toString();
     }
 
     public static void main(String[] args) {

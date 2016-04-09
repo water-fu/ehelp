@@ -26,7 +26,7 @@ function ajaxErrorCallBack(data, url) {
         data = data.data;
 
         if(data.code == 'login_time_out') {
-            location.href = url;
+            location.href = data.url;
         }
     } else {
         alert(data.msg);

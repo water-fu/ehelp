@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    #parse("sys_param.vm")
+
     <meta charset="UTF-8">
     <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>注册完成</title>
+    <title>$!{TITLE}</title>
 
-    #parse("sys_param.vm")
     #parse("addon/app/css.vm")
 </head>
 <body>
@@ -41,7 +42,7 @@
 <script type="text/javascript">
 
     function ready() {
-        shareTimeLine('欢迎邀请E帮护', '$!{SERVER_PATH}/p/register', '');
+        shareTimeLine('欢迎邀请E帮护', '$!{SERVER_PATH}/p/1/register', '');
     }
 
     wx_config(ready);

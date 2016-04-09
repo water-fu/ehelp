@@ -1,6 +1,7 @@
 package com.wisdom.service.service.user;
 
 import com.wisdom.common.entity.PageInfo;
+import com.wisdom.common.entity.SessionDetail;
 import com.wisdom.dao.entity.Account;
 
 import java.util.List;
@@ -76,4 +77,12 @@ public interface IAccountService {
      * @return
      */
     Account forget(Account account);
+
+    /**
+     * 账号绑定
+     * @param account
+     * @param sessionDetail
+     * @return
+     */
+    Account bind(Account account, SessionDetail sessionDetail);
 }

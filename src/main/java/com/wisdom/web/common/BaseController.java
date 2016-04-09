@@ -2,6 +2,7 @@ package com.wisdom.web.common;
 
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.exception.ApplicationException;
+import com.wisdom.web.common.constants.SysParamDetailConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -89,5 +90,19 @@ public class BaseController {
         }
 
         return resultBean;
+    }
+
+    /**
+     * 根据type转换用户类型
+     * @param type
+     * @return
+     */
+    protected String transType(String type) {
+        switch (type) {
+            case SysParamDetailConstant.ACCOUNT_TYPE_PATIENT:
+                return "patient";
+            default:
+                return type;
+        }
     }
 }

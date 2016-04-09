@@ -1,6 +1,10 @@
 package com.wisdom.web.controller.common;
 
 import com.wisdom.common.annotation.Check;
+import com.wisdom.common.cache.SessionCache;
+import com.wisdom.common.entity.SessionDetail;
+import com.wisdom.common.util.CookieUtil;
+import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.exception.ApplicationException;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,9 @@ public class IdentifyCodeController extends BaseController {
 
     @Autowired
     private IIdentifyCodeService identifyCodeService;
+
+    @Autowired
+    private SessionCache sessionCache;
 
     /**
      * 发送验证码
@@ -57,7 +65,46 @@ public class IdentifyCodeController extends BaseController {
                 ip = request.getRemoteAddr();
             }
 
-            String code = identifyCodeService.sendIdentifyCode(phoneNo, type, ip);
+            String code = identifyCodeService.sendIdentifyCode(phoneNo, type, ip, null);
+            // 发送短信 phoneNo+code
+
+            ResultBean resultBean = new ResultBean(true);
+
+            return resultBean;
+        } catch (Exception ex) {
+            return ajaxException(ex);
+        }
+    }
+
+    /**
+     * 账号绑定发送验证码，需要校验是否登陆，登陆后才能进行绑定
+     * @param phoneNo
+     * @return
+     */
+    @RequestMapping(value = "bindSendCode", method = RequestMethod.POST)
+    @ResponseBody
+    @Check(loginCheck = true)
+    public ResultBean bindSendIdentifyCode(String phoneNo, String type, HttpServletRequest request) {
+        try {
+            if(!StringUtil.isNotEmptyObject(phoneNo)) {
+                throw new ApplicationException("请填写手机号码");
+            }
+
+            String ip = request.getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+                ip = request.getRemoteAddr();
+            }
+
+            Cookie cookie = CookieUtil.getCookieByName(request, CommonConstant.COOKIE_VALUE);
+            SessionDetail sessionDetail = (SessionDetail) sessionCache.get(cookie.getValue());
+
+            String code = identifyCodeService.sendIdentifyCode(phoneNo, type, ip, sessionDetail);
             // 发送短信 phoneNo+code
 
             ResultBean resultBean = new ResultBean(true);

@@ -1,15 +1,16 @@
 package com.wisdom.service.service.sys.impl;
 
-import com.wisdom.dao.entity.Account;
-import com.wisdom.dao.entity.AccountExample;
+import com.wisdom.common.config.SystemSetting;
+import com.wisdom.common.entity.SessionDetail;
+import com.wisdom.dao.entity.*;
 import com.wisdom.dao.mapper.AccountMapper;
+import com.wisdom.dao.mapper.WeChatLoginMapper;
+import com.wisdom.mapp.core.Application;
 import com.wisdom.web.common.constants.CommonConstant;
 import com.wisdom.web.common.constants.SysParamDetailConstant;
 import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.DateUtil;
 import com.wisdom.common.util.StringUtil;
-import com.wisdom.dao.entity.IdentifyCode;
-import com.wisdom.dao.entity.IdentifyCodeExample;
 import com.wisdom.dao.mapper.IdentifyCodeMapper;
 import com.wisdom.service.service.sys.IIdentifyCodeService;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,13 +34,19 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
     @Autowired
     private AccountMapper accountMapper;
 
+    @Autowired
+    private WeChatLoginMapper weChatLoginMapper;
+
+    @Autowired
+    private SystemSetting systemSetting;
+
     /**
      * 发送验证码
      * @param phoneNo
      * @param type
      */
     @Override
-    public String sendIdentifyCode(String phoneNo, String type, String ip) {
+    public String sendIdentifyCode(String phoneNo, String type, String ip, SessionDetail sessionDetail) {
 
         // 是注册的话，发送验证码先验证该手机号是否已经注册
         if(SysParamDetailConstant.IDENTIFY_TYPE_REGISTER.equals(type)) {
@@ -48,7 +55,7 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
 
             List<Account> accountList = accountMapper.selectByExample(accountExample);
             if(CollectionUtils.isNotEmpty(accountList)) {
-                throw new ApplicationException("手机号码已经注册");
+                throw new ApplicationException("手机号码已被注册");
             }
         }
         // 忘记密码,校验手机号码是否存在
@@ -60,6 +67,43 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
             if(CollectionUtils.isEmpty(accountList)) {
                 throw new ApplicationException("手机号码不存在");
             }
+        }
+        // 账号绑定
+        else if(SysParamDetailConstant.IDENTIFY_TYPE_BIND.equals(type)) {
+            AccountExample accountExample = new AccountExample();
+            accountExample.createCriteria().andPhoneNoEqualTo(phoneNo);
+
+            List<Account> accountList = accountMapper.selectByExample(accountExample);
+
+            // 不为空
+            if(CollectionUtils.isNotEmpty(accountList)) {
+                Account account = accountList.get(0);
+
+                // 如果账号类型，与登陆用户账号类型不一致，则提示手机号码已经注册
+                if(!sessionDetail.getType().equals(account.getType())) {
+                    throw new ApplicationException("手机号码已被注册");
+                }
+
+                // 数据来源，微信、微博、QQ，不同的来源需要不同的表中进行校验，判断是否已经绑定
+                String from = sessionDetail.getFrom();
+
+                switch (from) {
+                    // 微信
+                    case SysParamDetailConstant.LOGIN_FROM_WECHAT:
+                        WeChatLoginExample example = new WeChatLoginExample();
+                        example.createCriteria().andAccountIdEqualTo(account.getId());
+
+                        List<WeChatLogin> weChatLoginList = weChatLoginMapper.selectByExample(example);
+                        if(CollectionUtils.isNotEmpty(weChatLoginList)) {
+                            throw new ApplicationException("手机号码已经被绑定");
+                        }
+                        break;
+                }
+            }
+
+        }
+        else {
+            throw new ApplicationException("Type参数不正确");
         }
 
         String code;
@@ -76,7 +120,14 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
             identifyCode.setType(type);
             identifyCode.setPhoneNo(phoneNo);
             identifyCode.setIpCode(ip);
-            identifyCode.setCode(StringUtil.genIdentifyCode());
+
+            // 生产环境发送验证码
+            if(systemSetting.getProductionMode()) {
+                identifyCode.setCode(StringUtil.genIdentifyCode());
+            } else {
+                identifyCode.setCode(CommonConstant.DEFAULT_IDENTIFY_CODE);
+            }
+
             identifyCode.setTime(1);
             identifyCode.setCreateTime(DateUtil.getTimestamp());
             // 验证码过期时间15分钟
@@ -97,7 +148,14 @@ public class IdentifyCodeServiceImpl implements IIdentifyCodeService {
                     !DateUtil.isValid(identifyCode.getInvalidTime())) {
 
                 identifyCode.setIpCode(ip);
-                identifyCode.setCode(StringUtil.genIdentifyCode());
+
+                // 生产环境发送验证码
+                if(systemSetting.getProductionMode()) {
+                    identifyCode.setCode(StringUtil.genIdentifyCode());
+                } else {
+                    identifyCode.setCode(CommonConstant.DEFAULT_IDENTIFY_CODE);
+                }
+
                 identifyCode.setTime(1);
                 identifyCode.setCreateTime(DateUtil.getTimestamp());
                 // 验证码过期时间15分钟
