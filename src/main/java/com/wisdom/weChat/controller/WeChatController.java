@@ -69,6 +69,8 @@ public class WeChatController extends BaseController {
     @Check(loginCheck = false)
     public String doPost(HttpServletRequest request) throws Exception {
 
+        System.out.println(123);
+
         return "";
     }
 

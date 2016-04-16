@@ -198,6 +198,7 @@ public class AccountServiceImpl implements IAccountService {
     public Account login(Account account) {
         AccountExample example = new AccountExample();
         example.createCriteria().andPhoneNoEqualTo(account.getPhoneNo())
+                .andTypeEqualTo(account.getType())
                 .andIsDelEqualTo(SysParamDetailConstant.IS_DEL_FALSE);
 
         List<Account> list = accountMapper.selectByExample(example);
@@ -207,8 +208,12 @@ public class AccountServiceImpl implements IAccountService {
         }
 
         Account accountData = list.get(0);
+        // 如果账号密码为空，则表示是第三方登陆，未设置密码
+        if(!StringUtil.isNotEmptyObject(accountData.getPassword())) {
+            throw new ApplicationException("账号使用第三方登陆");
+        }
 
-        boolean flag = EncryptFactory.getInstance(SysParamDetailConstant.MD5).isPasswordValid(accountData.getPassword(), account.getPassword(), account.getSalt());
+        boolean flag = EncryptFactory.getInstance(SysParamDetailConstant.MD5).isPasswordValid(accountData.getPassword(), account.getPassword(), accountData.getSalt());
         if(!flag) {
             throw new ApplicationException("密码不正确");
         }

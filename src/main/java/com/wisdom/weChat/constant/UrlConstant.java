@@ -14,7 +14,7 @@ public class UrlConstant {
     /**
      * 请求jsapi_ticket链接
      */
-    public static final String JSAPI_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
+    public static final String JSAPI_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
     /**
      * 查询菜单链接

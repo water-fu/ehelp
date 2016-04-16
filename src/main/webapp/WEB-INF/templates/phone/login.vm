@@ -13,17 +13,18 @@
 <div class="container">
     <div class="row">
         <header>
-            <a href="$!{CONTEXT_PATH}/p/$!{type}/register" class="fr">快速注册<i class="iconfont icon-shuangjiantou"></i></a>
+            <a href="javascript:void" onclick="toRegister()" class="fr">快速注册<i class="iconfont icon-shuangjiantou"></i></a>
         </header>
         <div class="banner">
             <img src="$!{CONTEXT_PATH}/static/app/image/m_logo.png" alt="logo" />
         </div>
         <div class="loginbox">
             <form id="loginForm">
+                <input type="hidden" value="$!{type}" name="type">
                 <ul>
                     <li>
                         <label>手机号:</label>
-                        <input type="number" name="phoneNo" placeholder="请输入正确有效的手机号"/>
+                        <input type="tel" name="phoneNo" placeholder="请输入正确有效的手机号"/>
                     </li>
                     <li>
                         <label class="pass">密&nbsp;&nbsp;&nbsp;码:</label>
@@ -50,6 +51,10 @@
 #parse("addon/app/javascript.vm")
 <script type="text/javascript">
     $(function() {
+        if('$!{resultBean.flag}' == 'true') {
+            alert('$!{resultBean.msg}');
+        }
+
         // 是否现实密码
         $('.passShow').click(function() {
             if($(this).attr('state') == '1') {
@@ -117,5 +122,9 @@
                 }
             }
         });
+    }
+
+    function toRegister() {
+        location.href = '$!{CONTEXT_PATH}/p/$!{type}/register';
     }
 </script>

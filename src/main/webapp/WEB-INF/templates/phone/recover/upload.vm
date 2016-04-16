@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("sys_param.vm")
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>$!{TITLE}</title>
+
+    #parse("addon/app/css.vm")
+    <style>
+        #allmap {width: 100%;height: 80%;overflow: hidden;margin:0;}
+
+        .modal-backdrop, .modal-backdrop-bg{
+            position: absolute !important;
+        }
+    </style>
+</head>
+<body class="fill">
+    <div class="container guide">
+        <div class="row">
+            <header>
+                <a href="#"><i class="iconfont icon-errowleft fl"></i></a>
+                <span class="m-r-xl">证书上传</span>
+                <a href="#" class="fr example">示例</a>
+            </header>
+            <ul class="infoput clearfix explain">
+                <li class="clearfix b-b">
+                    <label class="control-label">说明：</label>
+                </li>
+                <li class="clearfix">
+                    <p class="m-t-sm">1、请上传证书的封面和正页清晰照片。</p>
+                    <p>2、格式为JPG/PNG，不超过10张，单张不超过5M。</p>
+                </li>
+            </ul>
+            <div class="panel-body upload">
+                <div class="inner">
+                    <div class="upbox">
+##                        <input type="file" />
+                    </div>
+                </div>
+            </div>
+            <ul class="infoput clearfix">
+                <li class="clearfix b-b piclist_title">
+                    <label class="control-label tl">所有图片</label>
+                    <a href="#" class="fr">删除</a>
+                </li>
+                <li class="clearfix piclist">
+##                    <div href="#"><img src="" alt="" /><a href="#"><i class="iconfont icon-jian"></i></a></div>
+##                    <div href="#"><img src="" alt="" /><a href="#"><i class="iconfont icon-jian"></i></a></div>
+##                    <div href="#"><img src="" alt="" /><a href="#"><i class="iconfont icon-jian"></i></a></div>
+                </li>
+            </ul>
+
+            <form id="uploadForm">
+
+            </form>
+
+            <div class="tc">
+                <a href="javascript:void(0)" class="btn btn-login next">完成</a>
+            </div>
+            <div class="footer">
+                <p>客服电话：<b>400-158-1616</b></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="example_wrap">
+        <div class="example_title tc m-t-md">
+            <a href="#" class="fl wrap_close"><i class="iconfont icon-cuowu"></i></a>
+            <span>示例图片(<span class="seq">1</span>/<span class="count">3</span>)</span>
+        </div>
+        <div class="thumb m-t-lg">
+            <ul class="tc">
+                <li class="current"><img src="$!{CONTEXT_PATH}/static/app/image/example.png" alt="" /></li>
+                <li><img src="$!{CONTEXT_PATH}/static/app/image/example.png" alt="" /></li>
+                <li><img src="$!{CONTEXT_PATH}/static/app/image/example.png" alt="" /></li>
+            </ul>
+        </div>
+        <div class="gallery">
+            <img src="$!{CONTEXT_PATH}/static/app/image/example.png" alt="" />
+        </div>
+    </div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+#parse("addon/wxutil.vm")
+<script type="text/javascript">
+    var index = 0;
+    $(function() {
+        wx_config();
+
+        //删除上传图片，删除图标显示
+        $('.piclist_title a').click(function() {
+            $('.piclist a').css('display','inline-block');
+        });
+
+        //示例图片展示
+        $('a.example').click(function() {
+            $('.example_wrap').fadeIn();
+        });
+        $('a.wrap_close').click(function() {
+            $('.example_wrap').fadeOut();
+        });
+
+        $('.thumb li').click(function() {
+            $('.count').html($('.thumb li').length);
+            $('.seq').html($(this).index() + 1);
+            $(this).index()
+            $(this).addClass('current').siblings().removeClass('current');
+            var c_src = $(this).children().attr('src');
+            $('.gallery img').attr('src', c_src);
+        });
+
+        // 上传图片
+        $('.inner').click(function() {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+
+                    var div = $('<div href="javascript:void(0)">');
+                    div.addClass('input_' + index);
+                    var img = $('<img alt="">');
+                    img.attr('src', localIds);
+                    var a = $('<a href="javascript:void(0);" onclick="del(this)"></a>');
+                    var i = $('<i class="iconfont icon-jian"></i>');
+
+                    a.append(i);
+                    div.append(img);
+                    div.append(a);
+
+                    $('.piclist').append(div);
+
+                    var input = $('<input type="hidden" class="inputLocal">')
+                    input.attr('id', 'input_' + index);
+                    input.val(localIds);
+
+                    $('#uploadForm').append(input);
+                    index++;
+                }
+            });
+        });
+
+        // 下一步
+        $('.next').bind('click', save);
+    });
+
+    function del(el) {
+        var div = $(el).parent();
+        $('input#' + div.attr('class')).remove();
+        div.remove();
+    }
+
+    function save() {
+
+        $('.next').addClass('btn-gray');
+        $('.next').unbind('click');
+
+
+        $('.inputLocal').each(function() {
+            alert($(this).val());
+//            uploadImage($('#headLocalId').val(), function(data) {
+//
+//            });
+        });
+
+//        $('.next').html('正在保存');
+//
+//        $.ajax({
+//            url: base + '/p/recover/personalInfo',
+//            data: $('#personInfoForm').serialize(),
+//            type: 'post',
+//            error: function(XMLHttpRequest, textStatus, errorThrown) {
+//                alert('网络异常，请稍后再试');
+//
+//                $('.next').html('完成');
+//                $('.next').removeClass('btn-gray');
+//                $('.next').bind('click', save);
+//            },
+//            success: function(data) {
+//                if(data.flag) {
+//
+//                } else {
+//                    ajaxErrorCallBack(data);
+//
+//                    $('.next').html('完成');
+//                    $('.next').removeClass('btn-gray');
+//                    $('.next').bind('click', save);
+//
+//                }
+//            }
+//        });
+    }
+</script>

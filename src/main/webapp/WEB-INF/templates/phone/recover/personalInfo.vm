@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("sys_param.vm")
+
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>$!{TITLE}</title>
+
+    #parse("addon/app/css.vm")
+    <style>
+        #allmap {width: 100%;height: 80%;overflow: hidden;margin:0;}
+
+        .modal-backdrop, .modal-backdrop-bg{
+            position: absolute !important;
+        }
+    </style>
+</head>
+<body class="fill">
+    <div class="container guide">
+        <div class="row">
+            <header>
+                <a href="#"><i class="iconfont icon-errowleft fl"></i></a>
+                <span class="m-r-xl">个人简况</span>
+            </header>
+            <form id="personInfoForm">
+                <ul class="infoput clearfix">
+                    <li class="clearfix b-b">
+                        <label class="control-label col-xs-3">现居地址：</label>
+                        <div class="col-xs-9 address">
+                            <input type="text" name="address" class="form-control" placeholder="请输入"/>
+    ##                        <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" id="showMap"></a>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label class="control-label col-xs-3">职称级别：</label>
+                        <div class="col-xs-9 time">
+                            <select name="profess" class="form-control">
+                                <option>请选择职称级别</option>
+                                #foreach($param in $!{cache.getListByKey("PERFESS_LEVEL")})
+                                    <option value="$!{param.pValue}">$!{param.pDesc}</option>
+                                #end;
+                            </select>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="infoput clearfix">
+                    <li class="clearfix describe">
+                        <label class="control-label col-xs-3">服务经验：</label>
+                        <div class="col-xs-9 p-n">
+                            <textarea rows="3" name="serviceExp" class="form-control" placeholder="请描述主要从业经验..."></textarea>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="infoput clearfix">
+                    <li class="clearfix b-b">
+                        <label class="control-label col-xs-3">服务地区：</label>
+                        <div class="col-xs-9 time">
+                            <input type="text" class="form-control" placeholder="请选择"/>
+    ##                        <a href="#"></a>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <panel class="add_head"><i class="iconfont icon-circularframejiahao"></i>添加服务地区</panel>
+                    </li>
+                </ul>
+            </form>
+            <div class="tc">
+                <a href="javascript:void(0);" class="btn btn-login next">下一步</a>
+            </div>
+            <div class="footer">
+                <p>客服电话：<b>400-158-1616</b></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="areaModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h5 class="modal-title" id="myModalLabel">
+                        服务地区选择
+                    </h5>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm"
+                            data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm">
+                        确定
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+<script type="text/javascript">
+    $.ready(function() {
+
+        // 下一步
+        $('.next').bind('click', save);
+    });
+
+    function save() {
+        var address = $('#personInfoForm').find('input[name="address"]').val();
+        if(address == '') {
+            alert('请填写现居地址');
+            return;
+        }
+
+        var profess = $('#personInfoForm').find('select[name="profess"]').val();
+        if(profess == '') {
+            alert('请选择职业职称');
+            return;
+        }
+
+        var serviceExp = $('#personInfoForm').find('textarea[name="serviceExp"]').val();
+        if(serviceExp == '') {
+            alert('请填写服务经验');
+            return;
+        }
+
+        $('.next').addClass('btn-gray');
+        $('.next').unbind('click');
+
+        $('.next').html('正在保存');
+
+        $.ajax({
+            url: base + '/p/recover/personalInfo',
+            data: $('#personInfoForm').serialize(),
+            type: 'post',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert('网络异常，请稍后再试');
+
+                $('.next').html('下一步');
+                $('.next').removeClass('btn-gray');
+                $('.next').bind('click', save);
+            },
+            success: function(data) {
+                if(data.flag) {
+                    location.href = '$!{CONTEXT_PATH}/p/recover/upload';
+                } else {
+                    ajaxErrorCallBack(data);
+
+                    $('.next').html('下一步');
+                    $('.next').removeClass('btn-gray');
+                    $('.next').bind('click', save);
+
+                }
+            }
+        });
+    }
+</script>

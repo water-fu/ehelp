@@ -42,7 +42,7 @@ public class JsapiTicketServiceImpl implements IJsapiTicketService {
 
         AccessToken accessToken = (AccessToken) sessionCache.get(CommonConstant.ACCESS_TOKEN_VALUE);
 
-        String url = UrlConstant.JSAPI_TICKET.replace("ACCESS_TOKEN", accessToken.getToken());
+        String url = UrlConstant.JSAPI_TICKET_URL.replace("ACCESS_TOKEN", accessToken.getToken());
         JSONObject jsonObject = HttpClientUtil.doGetStr(url);
 
         if(jsonObject != null) {

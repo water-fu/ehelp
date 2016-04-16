@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("sys_param.vm")
+
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>$!{TITLE}</title>
+
+    #parse("addon/app/css.vm")
+</head>
+<body>
+<div class="container over">
+    <div class="row">
+        <img src="$!{CONTEXT_PATH}/static/app/image/over.png" alt="poster" />
+        <a href="$!{CONTEXT_PATH}/p/recover/index" class="list">
+            <span></span>
+            <ul>
+                <li class="title">查看附近订单</li>
+                <li>查看服务范围内的服务订单</li>
+            </ul>
+            <i class="iconfont icon-zhankaijiantou"></i>
+        </a>
+        <a href="$!{CONTEXT_PATH}/p/recover/identification" class="list">
+            <span></span>
+            <ul>
+                <li class="title">实名认证</li>
+                <li>认证即返话费10元，预约享会员优惠价。</li>
+            </ul>
+            <i class="iconfont icon-zhankaijiantou"></i>
+        </a>
+        <div class="btnbox">
+            <p>推荐他人成功注册，可享分级现金返还。</p>
+            <button class="btn btn-groom">推荐好友注册</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+#parse("addon/wxutil.vm")
+<script type="text/javascript">
+
+    function ready() {
+        shareTimeLine('欢迎邀请E帮护', '$!{SERVER_PATH}/p/5/register', '');
+    }
+
+    wx_config(ready);
+
+    $(function() {
+
+    });
+</script>

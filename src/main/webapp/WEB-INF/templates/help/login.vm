@@ -34,6 +34,7 @@
                     <div class="loginbox">
                         <p class="wel">欢迎您登录</p>
                         <form id="loginForm">
+                            <input type="hidden" name="type" value="1">
                             <input type="text" class="username" placeholder="请输入账号" name="userName"/>
                             <input type="password"  class="password" placeholder="请输入密码" name="password"/>
                         </form>

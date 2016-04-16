@@ -268,6 +268,27 @@ input::-moz-focus-inner { border: 0; padding: 0;}
 .m-b-n-xl {
 	margin-bottom:-40px;
 }
+.p-t-n{
+	padding-top: none;
+}
+.p-t-xs{
+	padding-top: 5px;
+}
+.p-t-sm-{
+	padding-top: 10px;
+}
+.p-t-md{
+	padding-top: 15px;
+}
+.p-t-lg{
+	padding-top: 20px;
+}
+.p-t-xl{
+	padding-top: 25px;
+}
+.p-t-xxl{
+	padding-top: 30px;
+}
 /*some css for mobile edit by linsywu*/
 body{
 	background: #fff url(../image/m_bg.png) no-repeat;
@@ -330,7 +351,8 @@ div.banner>img{
     color: #949494;
     cursor: pointer;
 }
-.loginbox .btn-login{
+.loginbox .btn-login,
+.fill .btn-login{
 	width: 90%;
     height: 35px;
     border-radius: 100px;
@@ -523,4 +545,338 @@ a.vertify:hover, a.vertify:active, a.vertify:focus{
     vertical-align: middle;
     margin: 0px;
 }
-    
+/*guide.html*/
+.guide header{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	font-size: 1.5rem;
+	color: #fff;
+	text-align: center;
+	background-color: #51ba12;
+}
+.guide header i{
+	font-size: 2em;
+	color:#fff;
+}
+.step{
+	color: #999;
+	margin-bottom: 0px;
+}
+.step>b{
+	display: inline-block;
+    width: 25px;
+    height: 25px;
+    background: #43b6a8;
+    color: #fff;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 100px;
+    font-size: 1.8rem;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.flow .intro{
+	padding-left: 2.5rem;
+	font-size: 1.3rem;
+}
+.flow{
+	background: url(../image/arrow.png) no-repeat;
+    background-position: center -4px;
+    background-size: contain;
+    min-height: 525px;
+    position: relative;
+}
+.flow>div{
+	position: absolute;
+}
+.flow>div:nth-child(odd){
+	right: 0px;
+}
+.flow>div.one{
+	top: 35px;
+}
+.flow>div.two{
+	top: 123px;
+}
+.flow>div.three{
+	top: 205px;
+}
+.flow>div.four{
+	top: 282px;
+}
+.flow>div.five{
+	top: 358px;
+}
+.flow>div.six{
+	top: 437px;
+}
+.flow>div:nth-child(2) b{
+	background-color: #02b8cd;
+}
+.flow>div:nth-child(3) b{
+	background-color: #239db5;
+}
+.flow>div:nth-child(4) b{
+	background-color: #ccd86c;
+}
+.flow>div:nth-child(5) b{
+	background-color: #71b383;
+}
+.flow>div:nth-child(6) b{
+	background-color: #51ba12;
+}
+.flow+.order{
+	display: block;
+	width: 100px;
+	height: 100px;
+	margin: 0px auto;
+	text-align: center;
+	font-size: 1.5rem;
+	color: #fff;
+	padding-top: 65px;
+	border-radius: 100px;
+	background: #51ba12 url(../image/ten.png) no-repeat center 25px;
+	-webkit-background-size:30px;
+	background-size:30px;
+}
+.guide .footer{
+	text-align: center;
+    font-size: 1.5rem;
+    color: #444444;
+    margin: 10px 0px;
+    padding: 18px 0px 1px 0px;
+    box-shadow: 0px -13px 34px -10px #ddd;
+}
+/*fill.html css*/
+.fill{
+	background: #eeeeee;
+	overflow-x: hidden;
+}
+.fill .infoput .col-xs-2,
+.fill .infoput .col-xs-10{
+	padding: 0px;
+}
+.infoput{
+	background-color: #fff;
+	margin: 15px 0px;
+	width: 100%;
+}
+.infoput>li{
+    margin-left:-20px;
+}
+.fill .control-label{
+	text-align: right;
+    display: inline-block;
+    height: 45px;
+    line-height: 45px;
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+.fill .form-control{
+    /*height: 45px;*/
+    /*line-height: 45px;*/
+    border: none;
+    outline: none;
+    box-shadow: none;
+
+	margin-top: 6px;
+}
+.b-b{
+	border-bottom: 1px solid #ddd;
+}
+.radio>a{
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	margin-left: 10px;
+	color: #000;
+	border-radius: 15px;
+	border: 1px solid #D0D0D0;
+}
+.radio>a.checked{
+	background-color: #6dc538;
+	border-color: #6dc538;
+	color: #fff;
+}
+.address>a,
+.time>a{
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	right: 5px;
+	top: 13px;
+}
+.address>a{
+	background: #fff url(../image/location.png) no-repeat;
+	-webkit-background-size: 80%;
+	background-size: 80%;
+}
+.time>a{
+	background: #fff url(../image/rightarrow.png) no-repeat;
+	-webkit-background-size: 45%;
+	background-size: 45%;
+	right: 0px;
+}
+.describe .col-xs-3,
+.infoput .col-xs-3{
+	padding: 0px;
+	text-align: center;
+}
+.p-n,
+.describe .col-xs-9,
+.infoput .col-xs-9{
+	padding: 0px;
+}
+.describe textarea.form-control{
+	height: auto;
+    padding-top: 0px;
+}
+.describe{
+	position: relative;
+}
+.describe a{
+	position: absolute;
+    bottom: 10px;
+    right: 5px;
+    width: 98px;
+    height: 30px;
+    background: url(../image/mic.png) no-repeat 10px center;
+    color: #888;
+    border: 1px solid #888;
+    border-radius: 22px;
+    padding-left: 35px;
+    line-height: 29px;
+}
+.fill .btn-login{
+	margin: 6px 0;
+}
+.over .content{
+	text-align: center;
+	padding: 80px 0px;
+}
+.over .content>img{
+	width: 60%;
+	margin-bottom: 20px;
+}
+.over .footer{
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	text-align: center;
+}
+.add_head{
+	display: block;
+	padding: 12px 0px;
+	font-size: 1.3rem;
+	color: #9D9D9D;
+}
+.add_head>i{
+	color: #00a3d9;
+	font-size: 2rem;
+	margin-right: 5px;
+}
+.explain p{
+	color: #9D9D9D;
+}
+.upload{
+	background-color: #fff;
+}
+.upload>.inner{
+	width: 100%;
+	border: 1px dashed #ddd;
+	height: 150px;
+	text-align: center;
+	line-height: 150px;
+}
+.upload .upbox{
+	display: inline-block;
+    background: url(../image/upload.png) no-repeat center;
+    background-size: contain;
+    width: 100px;
+    height: 79px;
+    margin-top: 25px;
+}
+.upload .upbox input{
+	display: inline-block;
+	opacity: 0;
+}
+.piclist_title{
+	line-height: 50px;
+}
+.piclist_title>a{
+	font-size: 1.3rem;
+	margin-right: 10px;
+}
+.piclist>div{
+	display: inline-block;
+	width: 30%;
+	border: 1px solid #ddd;
+	padding: 5px;
+	margin-right:3px;
+	position: relative;
+}
+.piclist{
+	padding: 10px 0;
+}
+.piclist img{
+	width: 100%;
+}
+.piclist a{
+	position: absolute;
+	right: -7px;
+	top: -10px;
+	display: none;
+}
+.piclist a>i{
+	color: #ec4b15;
+	font-size: 1.3rem;
+}
+a.example{
+	color: #fff;
+}
+.example_wrap{
+	width: 100%;
+	height: 100%;
+	position:fixed;
+	top: 0;
+	left: 0;
+	background-color:rgba(0,0,0,0.5);
+	display: none;
+}
+.example_title{
+	height: 50px;
+	line-height: 50px;
+	font-size: 1.8rem;
+	color: #fff;
+}
+.example_title i{
+	color: #fff;
+	margin-left: 10px;
+	font-size: 2.5rem;
+}
+.thumb>ul>li{
+	width:80px;
+	height: 60px;
+	border: 1px solid #9F9F9F;
+	padding: 3px;
+	display: inline-block;
+}
+.thumb>ul>li.current{
+	border-color: #f1f1f1;
+	box-shadow: 0px 0px 25px 0px #F1F1F1;
+}
+.thumb>ul>li>img{
+	width: 100%;
+	height: 100%;
+}
+.gallery{
+	width: 100%;
+	margin-top: 15px;
+}
+.gallery>img{
+	width: 100%;
+}

@@ -23,11 +23,11 @@
                 <ul>
                     <li>
                         <label>手机号:</label>
-                        <input type="number" name="phoneNo" placeholder="请输入正确有效的手机号" />
+                        <input type="tel" name="phoneNo" placeholder="请输入正确有效的手机号" />
                     </li>
                     <li>
                         <label class="pass">验证码:</label>
-                        <input type="number" name="code" placeholder="请输入验证码"/>
+                        <input type="tel" name="code" placeholder="请输入验证码"/>
                         <a href="javascript:void(0)" class="vertify sendCode">获取验证码</a>
                     </li>
                     <li>

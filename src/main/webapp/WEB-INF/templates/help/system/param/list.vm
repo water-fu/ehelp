@@ -35,7 +35,7 @@
 
     $(function() {
         $('.btn_oper').click(function() {
-            location.href = $(this).attr('src') + '#system-param';
+            load($(this).attr('src'));
         });
     });
 </script>

@@ -2,7 +2,9 @@ package com.wisdom.web.controller.phone.system;
 
 import com.wisdom.common.annotation.Check;
 import com.wisdom.common.cache.SessionCache;
+import com.wisdom.common.entity.ResultBean;
 import com.wisdom.common.entity.SessionDetail;
+import com.wisdom.common.exception.ApplicationException;
 import com.wisdom.common.util.CookieUtil;
 import com.wisdom.common.util.StringUtil;
 import com.wisdom.dao.entity.Account;
@@ -18,9 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -101,7 +105,7 @@ public class WeChatLoginController extends BaseController {
      */
     @RequestMapping(value = "loginCall", method = RequestMethod.GET)
     @Check(loginCheck = false)
-    public ModelAndView login(@RequestParam(value = "code", required = false) String code, @RequestParam("state") String state, String type, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView login(Model model, @RequestParam(value = "code", required = false) String code, @RequestParam("state") String state, String type, HttpServletRequest request, HttpServletResponse response) {
         try {
             if(logger.isDebugEnabled()) {
                 logger.debug("code:" + code);
@@ -110,11 +114,13 @@ public class WeChatLoginController extends BaseController {
             }
 
             if(!StringUtil.isNotEmptyObject(code)) {
-                return new ModelAndView("redirect:/");
+//                return new ModelAndView("redirect:/");
+                throw new ApplicationException("code为空");
             }
 
             if(!StringUtil.isNotEmptyObject(state) || !STATE.equals(state)) {
-                return new ModelAndView("redirect:/");
+//                return new ModelAndView("redirect:/");
+                throw new ApplicationException("state不正确");
             }
 
             WeChatLogin weChatLogin = weChatLoginService.login(code, type, request);
@@ -159,11 +165,18 @@ public class WeChatLoginController extends BaseController {
                 logger.error("缓存redis异常:" + ex.getMessage(), ex);
             }
 
-            return new ModelAndView("redirect:/p/patient/success");
+            return new ModelAndView(String.format(PHONE_VM_ROOT, "patient/success"));
 
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-            return new ModelAndView("redirect:/");
+
+            ResultBean resultBean = new ResultBean(true);
+            resultBean.setMsg(ex.getMessage());
+            model.addAttribute("resultBean", resultBean);
+
+            model.addAttribute("type", type);
+
+            return new ModelAndView(String.format(PHONE_VM_ROOT, "login"));
         }
     }
 }

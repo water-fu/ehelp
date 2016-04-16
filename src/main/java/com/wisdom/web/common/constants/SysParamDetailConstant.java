@@ -16,7 +16,9 @@ public class SysParamDetailConstant {
 
     public static final String ACCOUNT_TYPE_KF = "3"; // 客服
 
-    public static final String ACCOUNT_TYOE_DOCTOR = "4"; // 医生
+    public static final String ACCOUNT_TYPE_DOCTOR = "4"; // 医生
+
+    public static final String ACCOUNT_TYPE_RECOVER = "5"; // 康复师
 
     public static final String ACCOUNT_TYPE_ADMIN = "888"; // 系统管理员
 
@@ -81,6 +83,11 @@ public class SysParamDetailConstant {
      * 患者状态
      */
     public static final String PATIENT_STATUS_ADD = "1"; // 新增
+
+    /**
+     * 康复者状态
+     */
+    public static final String RECOVER_STATUS_ADD = "1"; // 新增
 
     /**
      * 登陆类型
