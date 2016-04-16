@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row">
         <header class="page_title">
-            <a href="$!{CONTEXT_PATH}/p/patient/success" class="fl"><i class="iconfont icon-errowleft"></i>取消</a>
+            <a href="$!{CONTEXT_PATH}/p/recover/success" class="fl"><i class="iconfont icon-errowleft"></i>取消</a>
             <span>实名认证</span>
         </header>
         <div class="loginbox regis iden">
@@ -170,7 +170,7 @@
         $('.btn-login').html('正在保存');
 
         $.ajax({
-            url: base + '/p/patient/identification_o',
+            url: base + '/p/recover/identification_o',
             data: $('#identifiForm').serialize(),
             type: 'post',
             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -182,7 +182,7 @@
             },
             success: function(data) {
                 if(data.flag) {
-                    location.href = '$!{CONTEXT_PATH}/p/patient/index';
+                    location.href = '$!{CONTEXT_PATH}/p/recover/index';
                 } else {
                     ajaxErrorCallBack(data);
 

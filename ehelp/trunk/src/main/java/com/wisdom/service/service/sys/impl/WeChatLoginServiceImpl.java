@@ -76,6 +76,7 @@ public class WeChatLoginServiceImpl implements IWeChatLoginService {
             List<WeChatLogin> list = weChatLoginMapper.selectByExample(example);
 
             if(CollectionUtils.isEmpty(list)) {
+
                 url = LoginUrlConstants.LOGIN_USER_INFO.replace("ACCESS_TOKEN", oAuthInfo.getAccess_token())
                         .replace("OPENID", oAuthInfo.getOpenid());
 
@@ -105,6 +106,11 @@ public class WeChatLoginServiceImpl implements IWeChatLoginService {
 
             } else {
                 weChatLogin = list.get(0);
+
+                // 如果不是同一个类型，就表示已经注册其他角色
+                if(!weChatLogin.getAccountType().equals(type)) {
+                    throw new ApplicationException("该微信号已经注册其他角色");
+                }
 
                 weChatLogin.setLastLoginip(weChatLogin.getLoginIp());
                 weChatLogin.setLastLogintime(weChatLogin.getLoginTime());

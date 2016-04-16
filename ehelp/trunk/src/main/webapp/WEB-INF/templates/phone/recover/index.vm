@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse("sys_param.vm")
+
+    <meta charset="UTF-8">
+    <meta a name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>$!{TITLE}</title>
+
+    #parse("addon/app/css.vm")
+</head>
+<body>
+<div class="container over">
+    这是首页
+</div>
+</body>
+</html>
+#parse("addon/app/javascript.vm")
+<script type="text/javascript">
+
+</script>

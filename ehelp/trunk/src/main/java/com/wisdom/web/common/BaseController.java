@@ -101,6 +101,8 @@ public class BaseController {
         switch (type) {
             case SysParamDetailConstant.ACCOUNT_TYPE_PATIENT:
                 return "patient";
+            case SysParamDetailConstant.ACCOUNT_TYPE_RECOVER:
+                return "recover";
             default:
                 return type;
         }
